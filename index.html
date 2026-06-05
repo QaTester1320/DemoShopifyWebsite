@@ -1609,7 +1609,21 @@
             flex-wrap: wrap;
             gap: 15px;
         }
+.global-back-btn{
+    max-width:1200px;
+    margin:20px auto 0;
+    padding:0 20px;
+    font-size:14px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:var(--color-dark-cocoa);
+    cursor:pointer;
+}
 
+.global-back-btn:hover{
+    opacity:.7;
+}
         /* ==========================================================================
            20. RESPONSIVE MEDIA QUERIES (MOBILE, TABLET, LAPTOP, DESKTOP)
            ========================================================================== */
@@ -1765,7 +1779,12 @@
     </header>
 
     <main>
-
+<div id="global-back-btn"
+     class="global-back-btn"
+     onclick="goBack()"
+     style="display:none;">
+    ← Back
+</div>
         <div id="view-home" class="spa-view active-view">
             <section class="hero-banner">
                 <div class="hero-content">
@@ -2236,11 +2255,19 @@
 
         // Modal Action Management References pointers
         let globalConfirmCallback = null;
+        let pageHistory = [];
 
         /* ==========================================================================
            23. ROUTING REGISTRY SWITCH MANAGEMENT (SMOOTH SPA SWAP VIEW)
            ========================================================================== */
-        function navigateTo(viewId) {
+        function navigateTo(viewId, addToHistory = true) {
+
+        if(addToHistory){
+    if(currentActiveView !== viewId){
+        pageHistory.push(currentActiveView);
+    }
+}
+            
             // Guard conditions checking account session validation rules
             if(viewId === 'account' && !customerSession.isLoggedIn) {
                 viewId = 'login';
@@ -2255,11 +2282,22 @@
             });
 
             const targetView = document.getElementById(`view-${viewId}`);
-            if(targetView) {
-                targetView.classList.add('active-view');
-                currentActiveView = viewId;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
+           if(targetView) {
+    targetView.classList.add('active-view');
+    currentActiveView = viewId;
+
+    const backBtn = document.getElementById("global-back-btn");
+
+    if(backBtn){
+        if(viewId === 'home' || pageHistory.length === 0){
+            backBtn.style.display = 'none';
+        } else {
+            backBtn.style.display = 'block';
+        }
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
             const headerNavLink = document.getElementById(`nav-${viewId}`);
             if(headerNavLink) {
@@ -2276,6 +2314,18 @@
             if(viewId === 'account') renderAccountPane();
         }
 
+function goBack(){
+
+    if(pageHistory.length === 0){
+        navigateTo('home', false);
+        return;
+    }
+
+    const previousView = pageHistory.pop();
+
+    navigateTo(previousView, false);
+}
+        
         function toggleMobileNav() {
             const nav = document.getElementById('mainNavMenu');
             if(nav.style.display === 'flex') {
