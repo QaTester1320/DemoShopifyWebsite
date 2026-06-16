@@ -2985,10 +2985,7 @@ function goBack(){
         }
 
         // Initialize execution sequence engine contexts upon layout attachment loading complete
-       window.addEventListener('DOMContentLoaded', () => {
-    initApp();
-    setupChocolateStoreDatabase();
-});
+        window.addEventListener('DOMContentLoaded', initApp);
 
         // Global reference to hold the database tab handle
 let databaseWindowHandle = null;
@@ -3021,30 +3018,6 @@ function sendSQLToSandbox(sqlQueryText) {
         action: "EXECUTE_FROM_FRONTEND",
         query: sqlQueryText
     }, "*"); // Using '*' allows cross-origin communication on localhost or github pages
-}
-        // 3. New function to automatically build a custom database for this chocolate store
-function setupChocolateStoreDatabase() {
-    // First, make sure we are connected to the sandbox tab
-    connectToDatabaseSandbox();
-
-    // Wait 1 second for the tab to open up, then send the creation queries
-    setTimeout(() => {
-        const createStoreSchemaSQL = `
-            CREATE DATABASE choco_shopify_db;
-            USE choco_shopify_db;
-
-            CREATE TABLE customer_orders (
-                order_id INT,
-                product_name STRING,
-                price DECIMAL,
-                quantity INT
-            );
-        `;
-        
-        // Send the structural instructions to the database tab
-        sendSQLToSandbox(createStoreSchemaSQL);
-        console.log("Custom store database and columns created successfully inside sandbox!");
-    }, 1000);
 }
         
     </script>
