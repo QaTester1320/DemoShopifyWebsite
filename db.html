@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content=\"width=device-width, initial-scale=1.0\">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChocoArtisan | Premium Shopify Chocolate Store</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -562,7 +562,7 @@
     <header>
         <div class="container nav-wrapper">
             <div class="logo">
-                <i class="fa-solid from-awesome fa-cubes"></i>
+                <i class="fa-solid fa-cubes"></i>
                 <span>ChocoArtisan</span>
                 <span style="font-size:12px; background:var(--color-sweet-cream); color:var(--color-warm-caramel); padding:2px 8px; border-radius:4px; font-weight:bold; border:1px solid var(--color-border)">Shopify Platform Mock</span>
             </div>
@@ -580,7 +580,7 @@
             <h1>Artisanal Chocolate Creations</h1>
             <p>Hand-crafted dark bars, milk creams, and caramel textures designed for automated workflow validation and UI sequence rendering metrics.</p>
             
-            <button onclick="connectToDatabaseSandbox()" style="padding: 10px 18px; background: #8C593B; color: white; border: none; font-weight: bold; cursor: pointer; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 5px; display: inline-flex; align-items: center; gap: 8px;">
+            <button onclick="connectAndSetupDatabaseSandbox()" style="padding: 10px 18px; background: var(--color-warm-caramel); color: white; border: none; font-weight: bold; cursor: pointer; border-radius: var(--border-radius-sm); margin-top: 5px; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition-smooth);">
                 <i class="fa-solid fa-plug"></i> 🔌 Connect Database Sandbox Tab
             </button>
         </div>
@@ -616,7 +616,7 @@
                 <button class="modal-close" onclick="hideModal('checkout-modal')"><i class="fa-solid fa-xmark"></i></button>
             </div>
             <div class="modal-body">
-                <form id="checkout-form" onsubmit="processCheckout(e)">
+                <form id="checkout-form">
                     <div class="form-group">
                         <label class="form-label" for="checkout-name">Full Name *</label>
                         <input type="text" id="checkout-name" class="form-input" required value="John QA Automation Tester">
@@ -698,7 +698,7 @@
             container.innerHTML = products.map(product => `
                 <div class="product-card">
                     <div class="product-image-container">
-                        <i class="fa-solid fa-box-tissue"></i>
+                        <i class="fa-solid fa-cookie"></i>
                         <span class="badge product-tag">${product.tag}</span>
                     </div>
                     <div class="product-info">
@@ -910,8 +910,8 @@
             // Hide operational screen overlays
             hideModal('checkout-modal');
             
-            // Display alert prompt tracking log values
-            alert(`Thank you for your order, ${name}!\n\nYour Order ID is: ${orderId}\nData statements have been securely pumped into your open MySQL Sandbox Tab logs!`);
+            // Display alert confirmation tracking statement
+            showNotification(`Order ${orderId} records transmitted successfully!`, 'success');
             
             // Reset active memory arrays and interface counters
             cart = [];
@@ -921,50 +921,22 @@
             if(formObj) formObj.reset();
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            initApp();
-            setupChocolateStoreDatabase();
-        });
+        // Initialize application visual items on load
+        window.addEventListener('DOMContentLoaded', initApp);
 
         // Global reference to hold the database tab handle
         let databaseWindowHandle = null;
 
-        // 1. Function to look up or open your live database sandbox in a new tab
-        function connectToDatabaseSandbox() {
-            // Check if the window reference is already open and active
+        // 1. Core function to look up or open your live database sandbox and send schema configurations
+        function connectAndSetupDatabaseSandbox() {
             if (!databaseWindowHandle || databaseWindowHandle.closed) {
-                // Using your actual live GitHub Pages link
                 const sandboxUrl = "https://qatester1320.github.io/sqldatabasedemo/p8.html";
-                
-                // Open the database sandbox in a completely new browser tab
                 databaseWindowHandle = window.open(sandboxUrl, "MySQL_Sandbox_Server");
-                alert("Database connection initialized! Keep the sandbox tab open to track operations.");
             } else {
-                // Bring the already opened tab to focus
                 databaseWindowHandle.focus();
             }
-        }
 
-        // 2. Core function to send SQL strings directly across tab boundaries
-        function sendSQLToSandbox(sqlQueryText) {
-            if (!databaseWindowHandle || databaseWindowHandle.closed) {
-                console.error("Database connection missing. Please connect to the sandbox first.");
-                return;
-            }
-            
-            // Shoot the payload containing the SQL query across browser tabs securely
-            databaseWindowHandle.postMessage({
-                action: "EXECUTE_FROM_FRONTEND",
-                query: sqlQueryText
-            }, "*"); // Using '*' allows cross-origin communication on localhost or github pages
-        }
-
-        // 3. New function to automatically build a custom database for this chocolate store
-        function setupChocolateStoreDatabase() {
-            // First, make sure we are connected to the sandbox tab
-            connectToDatabaseSandbox();
-
-            // Wait 1 second for the tab to open up, then send the creation queries
+            // Fire structural setup commands exactly 1.2 seconds after button is clicked to avoid race states
             setTimeout(() => {
                 const createStoreSchemaSQL = `
                     CREATE DATABASE choco_shopify_db;
@@ -977,11 +949,21 @@
                         quantity INT
                     );
                 `;
-                
-                // Send the structural instructions to the database tab
                 sendSQLToSandbox(createStoreSchemaSQL);
-                console.log("Custom store database and columns created successfully inside sandbox!");
-            }, 1000);
+                showNotification("Chocolate store database structure initialized!", "success");
+            }, 1200);
+        }
+
+        // 2. Transmit generated queries securely over to your opened sandbox tab
+        function sendSQLToSandbox(sqlQueryText) {
+            if (!databaseWindowHandle || databaseWindowHandle.closed) {
+                console.error("Database connection missing. Please click the connect button first.");
+                return;
+            }
+            databaseWindowHandle.postMessage({
+                action: "EXECUTE_FROM_FRONTEND",
+                query: sqlQueryText
+            }, "*");
         }
         
     </script>
