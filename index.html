@@ -2986,6 +2986,40 @@ function goBack(){
 
         // Initialize execution sequence engine contexts upon layout attachment loading complete
         window.addEventListener('DOMContentLoaded', initApp);
+
+        // Global reference to hold the database tab handle
+let databaseWindowHandle = null;
+
+// 1. Function to look up or open your live database sandbox in a new tab
+function connectToDatabaseSandbox() {
+    // Check if the window reference is already open and active
+    if (!databaseWindowHandle || databaseWindowHandle.closed) {
+        // REPLACE THIS URL with your actual live GitHub Pages sandbox link
+        const sandboxUrl = "https://qatester1320.github.io/sqldatabasedemo/p8.html";
+        
+        // Open the database sandbox in a completely new browser tab
+        databaseWindowHandle = window.open(sandboxUrl, "MySQL_Sandbox_Server");
+        alert("Database connection initialized! Keep the sandbox tab open to track operations.");
+    } else {
+        // Bring the already opened tab to focus
+        databaseWindowHandle.focus();
+    }
+}
+
+// 2. Core function to send SQL strings directly across tab boundaries
+function sendSQLToSandbox(sqlQueryText) {
+    if (!databaseWindowHandle || databaseWindowHandle.closed) {
+        console.error("Database connection missing. Please connect to the sandbox first.");
+        return;
+    }
+    
+    // Shoot the payload containing the SQL query across browser tabs securely
+    databaseWindowHandle.postMessage({
+        action: "EXECUTE_FROM_FRONTEND",
+        query: sqlQueryText
+    }, "*"); // Using '*' allows cross-origin communication on localhost or github pages
+}
+        
     </script>
 </body>
 </html>
