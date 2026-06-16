@@ -28,233 +28,373 @@
             --color-text-main: #33221C;
             --color-text-muted: #705A51;
             --color-success: #4E7C59;
-            --color-error: #A24836;
-            --color-shadow: rgba(44, 26, 20, 0.08);
-            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --border-radius-sm: 6px;
-            --border-radius-md: 12px;
-            --border-radius-lg: 20px;
-            --max-width: 1200px;
+            --color-danger: #A94442;
+            --transition-smooth: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --shadow-shopify: 0px 4px 12px rgba(44, 26, 20, 0.06);
+            --shadow-drawer: -5px 0 25px rgba(0,0,0,0.15);
         }
 
         body {
             background-color: var(--color-sweet-cream);
             color: var(--color-text-main);
-            line-height: 1.6;
+            overflow-x: hidden;
+            line-height: 1.5;
         }
 
-        /* ==========================================================================
-           2. REUSABLE UTILITIES
-           ========================================================================== */
-        .container {
-            width: 100%;
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 24px;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: var(--border-radius-md);
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition-smooth);
+        a {
             text-decoration: none;
+            color: inherit;
         }
 
-        .btn-primary {
-            background-color: var(--color-milk-chocolate);
-            color: var(--color-pure-white);
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
         }
 
-        .btn-primary:hover {
-            background-color: var(--color-dark-cocoa);
-            transform: translateY(-1px);
+        button, input, textarea, select {
+            font-family: inherit;
+            font-size: inherit;
+            outline: none;
         }
 
-        .btn-secondary {
-            background-color: transparent;
-            color: var(--color-milk-chocolate);
-            border: 2px solid var(--color-milk-chocolate);
+        /* Utility Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        .btn-secondary:hover {
-            background-color: rgba(74, 46, 34, 0.05);
+        ::-webkit-scrollbar-track {
+            background: var(--color-sweet-cream);
         }
-
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 4px 8px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 700;
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-warm-caramel);
+            border-radius: 4px;
         }
 
         /* ==========================================================================
-           3. HEADER & NAVIGATION
+           2. APP NAVIGATION WRAPPER (SHOW / HIDE SPA VIEWS)
            ========================================================================== */
+        .spa-view {
+            display: none;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            min-height: 70vh;
+            padding-top: 20px;
+        }
+
+        .spa-view.active-view {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ==========================================================================
+           3. SHOPIFY HEADER & ANNOUNCEMENT BAR
+           ========================================================================== */
+        .announcement-bar {
+            background-color: var(--color-dark-cocoa);
+            color: var(--color-sweet-cream);
+            text-align: center;
+            padding: 8px 10px;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
         header {
             background-color: var(--color-pure-white);
             border-bottom: 1px solid var(--color-border);
             position: sticky;
             top: 0;
             z-index: 100;
-            box-shadow: 0 2px 10px var(--color-shadow);
+            box-shadow: var(--shadow-shopify);
         }
 
-        .nav-wrapper {
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: 80px;
+            padding: 15px 24px;
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 22px;
+            font-size: 28px;
             font-weight: 800;
             color: var(--color-dark-cocoa);
-            letter-spacing: -0.5px;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .logo i {
             color: var(--color-warm-caramel);
         }
 
-        .nav-actions {
+        .nav-menu {
             display: flex;
-            align-items: center;
-            gap: 16px;
+            list-style: none;
+            gap: 30px;
         }
 
-        .cart-trigger {
+        .nav-link {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--color-milk-chocolate);
+            text-transform: uppercase;
+            letter-spacing: 1px;
             position: relative;
-            background: none;
-            border: none;
-            color: var(--color-text-main);
-            font-size: 20px;
+            padding: 4px 0;
             cursor: pointer;
-            padding: 8px;
             transition: var(--transition-smooth);
         }
 
-        .cart-trigger:hover {
+        .nav-link:hover, .nav-link.active {
             color: var(--color-warm-caramel);
         }
 
-        .cart-count {
+        .nav-link::after {
+            content: '';
             position: absolute;
-            top: -2px;
-            right: -2px;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--color-warm-caramel);
+            transition: var(--transition-smooth);
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-icon-btn {
+            background: none;
+            border: none;
+            color: var(--color-dark-cocoa);
+            font-size: 20px;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition-smooth);
+        }
+
+        .header-icon-btn:hover {
+            color: var(--color-warm-caramel);
+            transform: scale(1.05);
+        }
+
+        .cart-count-badge {
+            position: absolute;
+            top: -8px;
+            right: -10px;
             background-color: var(--color-warm-caramel);
             color: var(--color-pure-white);
-            min-width: 18px;
+            font-size: 11px;
+            font-weight: bold;
+            width: 18px;
             height: 18px;
             border-radius: 50%;
-            font-size: 11px;
-            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
-        /* ==========================================================================
-           4. HERO BANNER
-           ========================================================================== */
-        .hero {
-            background: linear-gradient(135deg, var(--color-dark-cocoa), var(--color-milk-chocolate));
-            color: var(--color-pure-white);
-            padding: 60px 0;
-            border-bottom-left-radius: var(--border-radius-lg);
-            border-bottom-right-radius: var(--border-radius-lg);
-            margin-bottom: 40px;
+        .mobile-toggle {
+            display: none;
+            font-size: 22px;
+            background: none;
+            border: none;
+            color: var(--color-dark-cocoa);
+            cursor: pointer;
         }
 
-        .hero-content {
-            max-width: 600px;
+        /* Database Server Connection Widget Banner */
+        .db-connection-widget {
+            background-color: var(--color-pure-white);
+            border-bottom: 1px solid var(--color-border);
+            padding: 10px 24px;
         }
-
-        .hero h1 {
-            font-size: 42px;
-            font-weight: 800;
-            line-height: 1.2;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
+        .db-widget-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-
-        .hero p {
-            font-size: 16px;
-            color: var(--color-creamy-truffle);
-            margin-bottom: 24px;
-        }
-
-        /* ==========================================================================
-           5. PRODUCT GRID & CARDS
-           ========================================================================== */
-        .section-title {
-            font-size: 24px;
-            font-weight: 800;
-            margin-bottom: 24px;
+        .db-status-info {
             display: flex;
             align-items: center;
             gap: 10px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .db-status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: var(--color-danger);
+        }
+        .db-status-dot.connected {
+            background-color: var(--color-success);
         }
 
+        /* ==========================================================================
+           4. SHOPIFY CUSTOM BUTTONS & COMPONENTS
+           ========================================================================== */
+        .shopify-btn {
+            background-color: var(--color-dark-cocoa);
+            color: var(--color-pure-white);
+            border: 1px solid var(--color-dark-cocoa);
+            padding: 12px 28px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .shopify-btn:hover {
+            background-color: var(--color-warm-caramel);
+            border-color: var(--color-warm-caramel);
+            color: var(--color-pure-white);
+        }
+
+        .shopify-btn-secondary {
+            background-color: transparent;
+            color: var(--color-dark-cocoa);
+            border: 2px solid var(--color-dark-cocoa);
+        }
+
+        .shopify-btn-secondary:hover {
+            background-color: var(--color-dark-cocoa);
+            color: var(--color-pure-white);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            color: var(--color-dark-cocoa);
+            margin-bottom: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--color-text-muted);
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        /* Grid Framework */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: var(--color-milk-chocolate);
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--color-border);
+            background-color: var(--color-pure-white);
+            color: var(--color-text-main);
+            transition: var(--transition-smooth);
+        }
+
+        .form-control:focus {
+            border-color: var(--color-warm-caramel);
+        }
+
+        /* ==========================================================================
+           5. PRODUCT CARD COMPONENT
+           ========================================================================== */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(4, 1fr);
             gap: 30px;
-            margin-bottom: 60px;
         }
 
         .product-card {
             background-color: var(--color-pure-white);
-            border-radius: var(--border-radius-md);
             border: 1px solid var(--color-border);
-            overflow: hidden;
-            box-shadow: 0 4px 6px var(--color-shadow);
+            position: relative;
             transition: var(--transition-smooth);
             display: flex;
             flex-direction: column;
+            box-shadow: var(--shadow-shopify);
         }
 
         .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 20px rgba(44, 26, 20, 0.12);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(44, 26, 20, 0.12);
         }
 
-        .product-image-container {
-            width: 100%;
-            height: 220px;
-            background-color: #F5EFEA;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .product-image-wrapper {
             position: relative;
+            overflow: hidden;
+            padding-bottom: 100%; /* Square ratio */
+            cursor: pointer;
+            background-color: #f7f7f7;
         }
 
-        .product-image-container i {
-            font-size: 72px;
-            color: var(--color-warm-caramel);
-            opacity: 0.8;
+        .product-card img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .product-tag {
+        .product-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .product-card-badge {
             position: absolute;
             top: 12px;
             left: 12px;
-            background-color: var(--color-dark-cocoa);
+            background-color: var(--color-warm-caramel);
             color: var(--color-pure-white);
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            z-index: 2;
         }
 
         .product-info {
@@ -264,708 +404,2629 @@
             flex-grow: 1;
         }
 
-        .product-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--color-dark-cocoa);
-        }
-
-        .product-desc {
-            font-size: 13px;
+        .product-vendor {
+            font-size: 12px;
+            text-transform: uppercase;
             color: var(--color-text-muted);
-            margin-bottom: 16px;
-            flex-grow: 1;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            font-weight: bold;
         }
 
-        .product-meta {
+        .product-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--color-dark-cocoa);
+            margin-bottom: 8px;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+
+        .product-title:hover {
+            color: var(--color-warm-caramel);
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #FFB800;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .product-rating span {
+            color: var(--color-text-muted);
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        .product-price-row {
+            margin-top: auto;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: auto;
+            padding-top: 10px;
         }
 
         .product-price {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
-            color: var(--color-milk-chocolate);
+            color: var(--color-dark-cocoa);
+        }
+
+        .card-action-btn {
+            background: none;
+            border: 2px solid var(--color-dark-cocoa);
+            color: var(--color-dark-cocoa);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .card-action-btn:hover {
+            background-color: var(--color-dark-cocoa);
+            color: var(--color-pure-white);
+            transform: rotate(90deg);
         }
 
         /* ==========================================================================
-           6. MODAL SYSTEM (CART & CHECKOUT)
+           6. VIEW 1: HOME PAGE
            ========================================================================== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(44, 26, 20, 0.5);
+        .hero-banner {
+            height: 70vh;
+            background-image: linear-gradient(rgba(44, 26, 20, 0.4), rgba(44, 26, 20, 0.5)), url('https://images.unsplash.com/photo-1548907040-4d42b52145ca?auto=format&fit=crop&w=1900&q=80');
+            background-size: cover;
+            background-position: center;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
+            text-align: center;
+            color: var(--color-pure-white);
+            padding: 0 24px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-content h1 {
+            font-size: 56px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            font-weight: 400;
+            color: var(--color-sweet-cream);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Featured Categories Minimal Circles Row */
+        .featured-categories-row {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .cat-circle-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            width: 110px;
+        }
+
+        .cat-circle-img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 2px solid var(--color-border);
+            overflow: hidden;
+            margin-bottom: 10px;
             transition: var(--transition-smooth);
-            backdrop-filter: blur(4px);
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-container {
             background-color: var(--color-pure-white);
-            border-radius: var(--border-radius-lg);
+        }
+
+        .cat-circle-card:hover .cat-circle-img {
+            transform: scale(1.1);
+            border-color: var(--color-warm-caramel);
+        }
+
+        .cat-circle-card span {
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-align: center;
+            color: var(--color-dark-cocoa);
+            letter-spacing: 0.5px;
+        }
+
+        /* Promo Highlight Section */
+        .promo-section {
+            background-color: var(--color-milk-chocolate);
+            color: var(--color-pure-white);
+            display: flex;
+            align-items: center;
+        }
+
+        .promo-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             width: 100%;
-            max-width: 500px;
-            max-height: 85vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            transform: scale(0.95);
-            transition: var(--transition-smooth);
         }
 
-        .modal-overlay.active .modal-container {
-            transform: scale(1);
+        .promo-text {
+            padding: 80px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .modal-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--color-border);
+        .promo-text h2 {
+            font-size: 38px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .promo-text p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: var(--color-border);
+        }
+
+        .promo-image {
+            background-image: url('https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            min-height: 450px;
+        }
+
+        /* ==========================================================================
+           7. VIEW 2: CATEGORIES (ALL CHOCOLATES MASTER CONTAINER)
+           ========================================================================== */
+        .category-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 40px;
+        }
+
+        .category-sidebar {
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            padding: 24px;
+            align-self: start;
+            box-shadow: var(--shadow-shopify);
+        }
+
+        .sidebar-widget-title {
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            color: var(--color-dark-cocoa);
+            border-bottom: 2px solid var(--color-border);
+            padding-bottom: 8px;
+        }
+
+        .category-filter-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .filter-item {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            transition: var(--transition-smooth);
         }
 
-        .modal-title {
-            font-size: 18px;
+        .filter-item:hover, .filter-item.active-filter {
+            color: var(--color-warm-caramel);
+            padding-left: 5px;
+        }
+
+        .filter-count {
+            background-color: var(--color-sweet-cream);
+            padding: 2px 8px;
+            font-size: 11px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        /* Sort Bar */
+        .category-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            padding: 12px 20px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-shopify);
+        }
+
+        .toolbar-count {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--color-text-muted);
+        }
+
+        .sort-select {
+            padding: 6px 12px;
+            border: 1px solid var(--color-border);
+            background-color: var(--color-pure-white);
+            font-weight: 600;
+            color: var(--color-text-main);
+            cursor: pointer;
+        }
+
+        /* ==========================================================================
+           8. VIEW 3: PRODUCT DETAILS PAGE (PDP)
+           ========================================================================== */
+        .pdp-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            padding: 40px;
+            box-shadow: var(--shadow-shopify);
+        }
+
+        .pdp-gallery {
+            position: relative;
+        }
+
+        .pdp-main-img-box {
+            border: 1px solid var(--color-border);
+            background-color: var(--color-sweet-cream);
+            overflow: hidden;
+            width: 100%;
+            padding-bottom: 100%;
+            position: relative;
+        }
+
+        .pdp-main-img-box img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .pdp-details-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pdp-vendor {
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: var(--color-warm-caramel);
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .pdp-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--color-dark-cocoa);
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .pdp-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 15px;
+        }
+
+        .pdp-price {
+            font-size: 26px;
             font-weight: 800;
             color: var(--color-dark-cocoa);
         }
 
-        .modal-close {
-            background: none;
-            border: none;
-            font-size: 18px;
-            color: var(--color-text-muted);
-            cursor: pointer;
-            padding: 4px;
-            transition: var(--transition-smooth);
+        .pdp-description {
+            font-size: 15px;
+            color: var(--color-text-main);
+            margin-bottom: 25px;
+            line-height: 1.6;
         }
 
-        .modal-close:hover {
-            color: var(--color-error);
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        /* Cart Content Specifics */
-        .cart-items-list {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 24px;
-            max-height: 300px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-
-        .cart-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        .cart-item-icon {
-            width: 50px;
-            height: 50px;
-            background-color: #F5EFEA;
-            border-radius: var(--border-radius-sm);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--color-warm-caramel);
-            font-size: 20px;
-        }
-
-        .cart-item-details {
-            flex-grow: 1;
-        }
-
-        .cart-item-name {
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--color-dark-cocoa);
-        }
-
-        .cart-item-price {
+        .qty-selector-label {
+            font-weight: bold;
             font-size: 13px;
-            color: var(--color-text-muted);
-            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: block;
+            color: var(--color-milk-chocolate);
         }
 
-        .cart-item-qty {
+        .pdp-actions-row {
             display: flex;
-            align-items: center;
-            gap: 8px;
-            background-color: var(--color-sweet-cream);
-            padding: 4px 8px;
-            border-radius: var(--border-radius-sm);
-            border: 1px solid var(--color-border);
+            gap: 15px;
+            margin-bottom: 30px;
+            align-items: flex-end;
+        }
+
+        .quantity-selector {
+            display: inline-flex;
+            border: 1px solid var(--color-dark-cocoa);
+            height: 46px;
+            background: var(--color-pure-white);
         }
 
         .qty-btn {
             background: none;
             border: none;
-            color: var(--color-milk-chocolate);
+            width: 40px;
+            height: 100%;
             cursor: pointer;
-            font-weight: 700;
-            padding: 0 4px;
-        }
-
-        .cart-item-remove {
-            background: none;
-            border: none;
-            color: var(--color-text-muted);
-            cursor: pointer;
-            padding: 4px;
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--color-dark-cocoa);
             transition: var(--transition-smooth);
         }
 
-        .cart-item-remove:hover {
-            color: var(--color-error);
+        .qty-btn:hover {
+            background-color: var(--color-sweet-cream);
         }
 
-        .cart-summary {
+        .qty-input {
+            width: 50px;
+            height: 100%;
+            border: none;
+            border-left: 1px solid var(--color-border);
+            border-right: 1px solid var(--color-border);
+            text-align: center;
+            font-weight: bold;
+            color: var(--color-dark-cocoa);
+        }
+
+        .pdp-add-btn {
+            flex-grow: 1;
+            height: 46px;
+        }
+
+        /* Review Section in PDP */
+        .pdp-reviews-section {
+            margin-top: 40px;
+            border-top: 1px solid var(--color-border);
+            padding-top: 30px;
+        }
+
+        .review-write-trigger {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .reviews-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .review-item {
             background-color: var(--color-sweet-cream);
-            border-radius: var(--border-radius-md);
-            padding: 16px;
+            padding: 15px;
             border: 1px solid var(--color-border);
-            margin-bottom: 24px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: var(--color-text-main);
+        }
+
+        /* ==========================================================================
+           9. SHOPIFY AUTOMATIC SLIDE OUT MINI-CART DRAWER
+           ========================================================================== */
+        .cart-drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(44, 26, 20, 0.5);
+            z-index: 150;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-smooth);
+        }
+
+        .cart-drawer-overlay.drawer-open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -450px;
+            width: 420px;
+            height: 100%;
+            background-color: var(--color-pure-white);
+            z-index: 151;
+            box-shadow: var(--shadow-drawer);
+            transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-drawer-overlay.drawer-open .cart-drawer {
+            right: 0;
+        }
+
+        .drawer-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: var(--color-sweet-cream);
+        }
+
+        .drawer-header h3 {
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--color-dark-cocoa);
+        }
+
+        .drawer-close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--color-dark-cocoa);
+            transition: var(--transition-smooth);
+        }
+
+        .drawer-close-btn:hover {
+            color: var(--color-warm-caramel);
+            transform: scale(1.1);
+        }
+
+        .drawer-items-container {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Empty Cart State */
+        .drawer-empty-state, .cart-page-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--color-text-muted);
+        }
+
+        .drawer-empty-state i, .cart-page-empty i {
+            font-size: 48px;
+            color: var(--color-border);
+            margin-bottom: 15px;
+        }
+
+        .drawer-item {
+            display: flex;
+            gap: 15px;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 15px;
+            position: relative;
+        }
+
+        .drawer-item-img {
+            width: 80px;
+            height: 80px;
+            border: 1px solid var(--color-border);
+            background-color: var(--color-sweet-cream);
+        }
+
+        .drawer-item-details {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer-item-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--color-dark-cocoa);
+            margin-bottom: 4px;
+            padding-right: 20px;
+        }
+
+        .drawer-item-price {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--color-warm-caramel);
+            margin-bottom: 8px;
+        }
+
+        .drawer-item-remove-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+            transition: var(--transition-smooth);
+        }
+
+        .drawer-item-remove-btn:hover {
+            color: var(--color-danger);
+        }
+
+        .drawer-footer {
+            padding: 20px;
+            border-top: 1px solid var(--color-border);
+            background-color: var(--color-sweet-cream);
+        }
+
+        .drawer-subtotal-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--color-dark-cocoa);
+            text-transform: uppercase;
+        }
+
+        .drawer-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .drawer-actions .shopify-btn {
+            width: 100%;
+        }
+
+        /* ==========================================================================
+           10. VIEW 4: CART PAGE
+           ========================================================================== */
+        .cart-page-layout {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .cart-table-container {
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            padding: 30px;
+            box-shadow: var(--shadow-shopify);
+        }
+
+        .cart-headings {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 1fr;
+            border-bottom: 2px solid var(--color-border);
+            padding-bottom: 12px;
+            font-weight: bold;
+            font-size: 13px;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .cart-page-item-row {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1fr 1fr;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        .cart-page-product {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .cart-page-img {
+            width: 90px;
+            height: 90px;
+            border: 1px solid var(--color-border);
+        }
+
+        .cart-page-item-title {
+            font-weight: 700;
+            color: var(--color-dark-cocoa);
+            font-size: 15px;
+        }
+
+        .cart-page-item-price, .cart-page-item-total {
+            font-weight: 700;
+            color: var(--color-dark-cocoa);
+        }
+
+        .cart-summary-panel {
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            padding: 30px;
+            box-shadow: var(--shadow-shopify);
+        }
+
+        .summary-title {
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--color-dark-cocoa);
+            border-bottom: 2px solid var(--color-border);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
         }
 
         .summary-row {
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            margin-bottom: 15px;
             font-size: 14px;
-            margin-bottom: 8px;
+            color: var(--color-text-main);
         }
 
-        .summary-row:last-child {
-            margin-bottom: 0;
-            padding-top: 8px;
-            border-top: 1px dashed var(--color-border);
-            font-size: 16px;
+        .summary-total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            border-top: 1px solid var(--color-border);
+            padding-top: 15px;
+            font-size: 18px;
             font-weight: 800;
             color: var(--color-dark-cocoa);
         }
 
-        .empty-cart-message {
-            text-align: center;
-            padding: 40px 0;
-            color: var(--color-text-muted);
+        /* ==========================================================================
+           11. VIEW 5: CHECKOUT PAGE
+           ========================================================================== */
+        .checkout-layout {
+            display: grid;
+            grid-template-columns: 1fr 450px;
+            gap: 40px;
         }
 
-        .empty-cart-message i {
-            font-size: 48px;
-            margin-bottom: 12px;
-            opacity: 0.5;
+        .checkout-form-section {
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            padding: 40px;
+            box-shadow: var(--shadow-shopify);
         }
 
-        /* Form Controls */
-        .form-group {
-            margin-bottom: 16px;
+        .checkout-block-title {
+            font-size: 18px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--color-dark-cocoa);
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 8px;
         }
 
-        .form-row {
+        .checkout-grid-2 {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px;
+            gap: 15px;
         }
 
-        .form-label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: var(--color-dark-cocoa);
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid var(--color-border);
-            border-radius: var(--border-radius-sm);
-            font-size: 14px;
-            color: var(--color-text-main);
+        .checkout-sidebar-summary {
             background-color: var(--color-pure-white);
-            transition: var(--transition-smooth);
+            border: 1px solid var(--color-border);
+            padding: 30px;
+            box-shadow: var(--shadow-shopify);
+            align-self: start;
         }
 
-        .form-input:focus {
-            outline: none;
-            border-color: var(--color-warm-caramel);
-            box-shadow: 0 0 0 3px rgba(140, 89, 59, 0.15);
+        .checkout-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .checkout-item-mini {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .checkout-item-mini-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .checkout-mini-img {
+            width: 50px;
+            height: 50px;
+            border: 1px solid var(--color-border);
+            position: relative;
+        }
+
+        .checkout-mini-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--color-warm-caramel);
+            color: var(--color-pure-white);
+            font-size: 10px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Order Success Screen Inside View State */
+        .order-success-box {
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            padding: 50px;
+            max-width: 600px;
+            margin: 40px auto;
+            text-align: center;
+            box-shadow: var(--shadow-shopify);
+        }
+
+        .order-success-box i {
+            font-size: 60px;
+            color: var(--color-success);
+            margin-bottom: 20px;
         }
 
         /* ==========================================================================
-           7. TOAST NOTIFICATION SYSTEM
+           12. VIEW 6: ABOUT US
            ========================================================================== */
-        #notification-toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background-color: var(--color-dark-cocoa);
+        .about-header {
+            height: 40vh;
+            background-image: linear-gradient(rgba(44, 26, 20, 0.5), rgba(44, 26, 20, 0.6)), url('https://images.unsplash.com/photo-1513534245088-238a19a34065?auto=format&fit=crop&w=1400&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: var(--color-pure-white);
-            padding: 14px 24px;
-            border-radius: var(--border-radius-md);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .about-content-box {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            padding: 40px;
+            box-shadow: var(--shadow-shopify);
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--color-text-main);
+        }
+
+        .about-content-box p {
+            margin-bottom: 20px;
+        }
+
+        /* ==========================================================================
+           13. VIEW 7: CONTACT US
+           ========================================================================== */
+        .contact-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-form-card {
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            padding: 40px;
+            box-shadow: var(--shadow-shopify);
+        }
+
+        .contact-info-card {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .info-row-item {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+
+        .info-row-item i {
+            font-size: 24px;
+            color: var(--color-warm-caramel);
+            margin-top: 4px;
+        }
+
+        .info-row-item h4 {
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--color-dark-cocoa);
+            margin-bottom: 4px;
+        }
+
+        /* ==========================================================================
+           14. VIEW 8: BLOG PAGES
+           ========================================================================== */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .blog-card {
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-shopify);
+            transition: var(--transition-smooth);
+        }
+
+        .blog-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .blog-img-box {
+            height: 220px;
+            overflow: hidden;
+        }
+
+        .blog-post-content {
+            padding: 24px;
+        }
+
+        .blog-meta {
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--color-warm-caramel);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .blog-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--color-dark-cocoa);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .blog-excerpt {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            margin-bottom: 20px;
+        }
+
+        /* ==========================================================================
+           15. VIEW 9 & 10: AUTH (LOGIN & SIGNUP)
+           ========================================================================== */
+        .auth-container {
+            max-width: 450px;
+            margin: 40px auto;
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            padding: 40px;
+            box-shadow: var(--shadow-shopify);
+        }
+
+        .auth-switch-text {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--color-text-muted);
+        }
+
+        .auth-switch-text span {
+            color: var(--color-warm-caramel);
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* ==========================================================================
+           16. VIEW 11: MY ACCOUNT (DASHBOARD, ORDERS, ADDRESS)
+           ========================================================================== */
+        .account-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            gap: 40px;
+        }
+
+        .account-tabs {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--color-border);
+            background-color: var(--color-pure-white);
+            box-shadow: var(--shadow-shopify);
+        }
+
+        .account-tab-btn {
+            padding: 15px 20px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--color-text-main);
+            border-bottom: 1px solid var(--color-border);
+            cursor: pointer;
+            transition: var(--transition-smooth);
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+
+        .account-tab-btn:last-child {
+            border-bottom: none;
+        }
+
+        .account-tab-btn:hover, .account-tab-btn.active-tab {
+            background-color: var(--color-sweet-cream);
+            color: var(--color-warm-caramel);
+            padding-left: 25px;
+        }
+
+        .account-content-pane {
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            padding: 30px;
+            box-shadow: var(--shadow-shopify);
+            display: none;
+        }
+
+        .account-content-pane.active-pane {
+            display: block;
+        }
+
+        .order-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .order-history-table th {
+            border-bottom: 2px solid var(--color-border);
+            padding: 12px;
+            font-size: 13px;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+        }
+
+        .order-history-table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid var(--color-border);
             font-size: 14px;
-            font-weight: 600;
-            transform: translateY(100px);
+        }
+
+        /* ==========================================================================
+           17. ANTI-ALERT CUSTOM CONFIRMATION POPUP MODAL
+           ========================================================================== */
+        .custom-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(44, 26, 20, 0.6);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             opacity: 0;
+            visibility: hidden;
             transition: var(--transition-smooth);
-            z-index: 2000;
         }
 
-        #notification-toast.active {
-            transform: translateY(0);
+        .custom-popup-overlay.popup-open {
             opacity: 1;
+            visibility: visible;
         }
 
-        #notification-toast.success { border-left: 4px solid var(--color-success); }
-        #notification-toast.error { border-left: 4px solid var(--color-error); }
+        .custom-popup-box {
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            width: 100%;
+            max-width: 400px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: scale(0.9);
+            transition: var(--transition-smooth);
+        }
 
+        .custom-popup-overlay.popup-open .custom-popup-box {
+            transform: scale(1);
+        }
+
+        .popup-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--color-dark-cocoa);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .popup-msg {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            margin-bottom: 24px;
+        }
+
+        .popup-actions-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .popup-actions-row button {
+            padding: 10px 20px;
+            font-size: 13px;
+        }
+
+        /* ==========================================================================
+           18. WRITE A REVIEW MODAL
+           ========================================================================== */
+        .review-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(44, 26, 20, 0.6);
+            z-index: 180;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-smooth);
+        }
+
+        .review-modal-overlay.modal-open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .review-modal-box {
+            background-color: var(--color-pure-white);
+            border: 1px solid var(--color-border);
+            width: 100%;
+            max-width: 500px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* ==========================================================================
+           19. REAL WORLD MULTI-COLUMN FOOTER WITH SOCIALS
+           ========================================================================== */
         footer {
             background-color: var(--color-dark-cocoa);
-            color: var(--color-creamy-truffle);
-            padding: 30px 0;
-            text-align: center;
-            font-size: 13px;
+            color: var(--color-sweet-cream);
+            margin-top: 60px;
             border-top: 4px solid var(--color-warm-caramel);
+        }
+
+        .footer-top {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 24px 40px 24px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+        }
+
+        .footer-col-title {
+            font-size: 14px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: var(--color-creamy-truffle);
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links li {
+            font-size: 14px;
+            color: var(--color-border);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .footer-links li:hover {
+            color: var(--color-pure-white);
+            padding-left: 4px;
+        }
+
+        .footer-about-text {
+            font-size: 14px;
+            color: var(--color-border);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .social-icons-wrapper {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-icon-circle {
+            width: 36px;
+            height: 36px;
+            background-color: var(--color-milk-chocolate);
+            color: var(--color-sweet-cream);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        .social-icon-circle:hover {
+            background-color: var(--color-warm-caramel);
+            color: var(--color-pure-white);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--color-milk-chocolate);
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--color-border);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .global-back-btn{
+            max-width:1200px;
+            margin:20px auto 0;
+            padding:0 20px;
+            font-size:14px;
+            font-weight:700;
+            text-transform:uppercase;
+            letter-spacing:1px;
+            color:var(--color-dark-cocoa);
+            cursor:pointer;
+        }
+
+        .global-back-btn:hover{
+            opacity:.7;
+        }
+        /* ==========================================================================
+           20. RESPONSIVE MEDIA QUERIES (MOBILE, TABLET, LAPTOP, DESKTOP)
+           ========================================================================== */
+        @media (max-width: 1200px) {
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+            }
+            .blog-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .footer-top {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .category-layout {
+                grid-template-columns: 1fr;
+            }
+            .category-sidebar {
+                display: none; 
+            }
+            .pdp-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                padding: 24px;
+            }
+            .cart-page-layout {
+                grid-template-columns: 1fr;
+            }
+            .checkout-layout {
+                grid-template-columns: 1fr;
+            }
+            .checkout-sidebar-summary {
+                order: -1;
+            }
+            .promo-split {
+                grid-template-columns: 1fr;
+            }
+            .promo-image {
+                min-height: 300px;
+            }
+            .contact-layout {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none; 
+            }
+            .mobile-toggle {
+                display: block;
+                margin-right: 15px;
+            }
+            .header-container {
+                justify-content: space-between;
+            }
+            .logo {
+                font-size: 22px;
+            }
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            .hero-content h1 {
+                font-size: 36px;
+            }
+            .account-layout {
+                grid-template-columns: 1fr;
+            }
+            .cart-headings {
+                display: none;
+            }
+            .cart-page-item-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                text-align: center;
+                border: 1px solid var(--color-border);
+                padding: 15px;
+                margin-bottom: 15px;
+                background: var(--color-pure-white);
+            }
+            .cart-page-product {
+                flex-direction: column;
+            }
+            .cart-drawer {
+                width: 100%;
+                right: -100%;
+            }
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-top {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .featured-categories-row {
+                gap: 12px;
+            }
+            .cat-circle-card {
+                width: 90px;
+            }
+            .cat-circle-img {
+                width: 70px;
+                height: 70px;
+            }
+            .checkout-grid-2 {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="container nav-wrapper">
-            <div class="logo">
-                <i class="fa-solid fa-cubes"></i>
-                <span>ChocoArtisan</span>
-                <span style="font-size:12px; background:var(--color-sweet-cream); color:var(--color-warm-caramel); padding:2px 8px; border-radius:4px; font-weight:bold; border:1px solid var(--color-border)">Shopify Platform Mock</span>
+    <div class="announcement-bar">
+        ✨ Free Global Shipping On Premium Chocolate Craft Orders Over $75 ✨
+    </div>
+
+    <!-- Live Database Sandbox Server Connection Tracker Widget Bar -->
+    <div class="db-connection-widget">
+        <div class="db-widget-container">
+            <div class="db-status-info">
+                <div class="db-status-dot" id="dbServerStatusDot"></div>
+                <span id="dbServerStatusText">Database Sandbox Server Connection Status: Offline / Not Connected</span>
             </div>
-            <div class="nav-actions">
-                <button class="cart-trigger" onclick="showModal('cart-modal')" title="Open Shopping Cart">
+            <button class="shopify-btn" style="padding: 6px 14px; font-size: 12px;" onclick="connectToDatabaseSandbox()">Connect DB Sandbox Server</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-container">
+            <div style="display: flex; align-items: center;">
+                <button class="mobile-toggle" onclick="toggleMobileNav()"><i class="fa-solid fa-bars"></i></button>
+                <div class="logo" onclick="navigateTo('home')">
+                    <i class="fa-solid fa-cookie-bite"></i> ChocoArtisan
+                </div>
+            </div>
+            
+            <ul class="nav-menu" id="mainNavMenu">
+                <li class="nav-link active" id="nav-home" onclick="navigateTo('home')">Home</li>
+                <li class="nav-link" id="nav-categories" onclick="navigateTo('categories')">Shop Chocolates</li>
+                <li class="nav-link" id="nav-about" onclick="navigateTo('about')">Our Story</li>
+                <li class="nav-link" id="nav-blog" onclick="navigateTo('blog')">Cocoa Blog</li>
+                <li class="nav-link" id="nav-contact" onclick="navigateTo('contact')">Contact Us</li>
+            </ul>
+
+            <div class="header-actions">
+                <button class="header-icon-btn" onclick="navigateTo('login')"><i class="fa-regular fa-user"></i></button>
+                <button class="header-icon-btn" onclick="openCartDrawer()">
                     <i class="fa-solid fa-bag-shopping"></i>
-                    <span class="cart-count" id="nav-cart-count">0</span>
+                    <span class="cart-count-badge" id="headerCartCount">0</span>
                 </button>
             </div>
         </div>
     </header>
 
-    <section class="hero">
-        <div class="container hero-content">
-            <h1>Artisanal Chocolate Creations</h1>
-            <p>Hand-crafted dark bars, milk creams, and caramel textures designed for automated workflow validation and UI sequence rendering metrics.</p>
-            
-            <button onclick="connectAndSetupDatabaseSandbox()" style="padding: 10px 18px; background: var(--color-warm-caramel); color: white; border: none; font-weight: bold; cursor: pointer; border-radius: var(--border-radius-sm); margin-top: 5px; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition-smooth);">
-                <i class="fa-solid fa-plug"></i> 🔌 Connect Database Sandbox Tab
-            </button>
+    <main>
+        <div id="global-back-btn" class="global-back-btn" onclick="goBack()" style="display:none;">
+            ← Back
         </div>
-    </section>
-
-    <main class="container">
-        <h2 class="section-title">
-            <i class="fa-solid fa-store"></i>
-            <span>Signature Collection</span>
-        </h2>
         
-        <div class="product-grid" id="catalog-products-container">
+        <div id="view-home" class="spa-view active-view">
+            <section class="hero-banner">
+                <div class="hero-content">
+                    <h1>Handcrafted Luxury Chocolates</h1>
+                    <p>Experience exquisite taste profiles created from rare single-origin cocoa beans, organic ingredients, and master Swiss techniques.</p>
+                    <button class="shopify-btn" onclick="navigateTo('categories')">Explore The Collection</button>
+                </div>
+            </section>
+
+            <section class="container">
+                <h2 class="section-title">Shop by Category</h2>
+                <p class="section-subtitle">Delve into our hand-curated flavor families</p>
+                <div class="featured-categories-row" id="homeCategoryRow"></div>
+            </section>
+
+            <section class="promo-section">
+                <div class="promo-split">
+                    <div class="promo-text">
+                        <h2>The Bean-To-Bar Philosophy</h2>
+                        <p>We source every batch of cocoa directly from sustainable farming co-ops. By processing the beans directly inside our micro-roastery, we extract rich aroma nuances that commercial manufacturers completely destroy.</p>
+                        <button class="shopify-btn shopify-btn-secondary" onclick="navigateTo('about')">Discover Our Roots</button>
+                    </div>
+                    <div class="promo-image"></div>
+                </div>
+            </section>
+
+            <section class="container">
+                <h2 class="section-title">Artisan Signatures</h2>
+                <p class="section-subtitle">Top rated confections globally loved by chocolate experts</p>
+                <div class="product-grid" id="homeFeaturedProducts"></div>
+            </section>
+        </div>
+
+        <div id="view-categories" class="spa-view">
+            <div class="container">
+                <h2 class="section-title">The Complete Chocolate Archive</h2>
+                <p class="section-subtitle">Filter through 100 uniquely crafted culinary masterpieces</p>
+
+                <div class="category-layout">
+                    <aside class="category-sidebar">
+                        <h3 class="sidebar-widget-title">Categories</h3>
+                        <ul class="category-filter-list" id="sidebarCategoryFilter"></ul>
+                    </aside>
+
+                    <div>
+                        <div class="category-toolbar">
+                            <div class="toolbar-count" id="catalogResultsCount">Showing all items</div>
+                            <div>
+                                <select class="sort-select" id="catalogSortSelect" onchange="applySorting()">
+                                    <option value="default">Featured</option>
+                                    <option value="price-low">Price: Low to High</option>
+                                    <option value="price-high">Price: High to Low</option>
+                                    <option value="rating">Top Rated</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="product-grid" id="catalogProductGrid"></div>
+                    </div>
+                </div>
             </div>
+        </div>
+
+        <div id="view-pdp" class="spa-view">
+            <div class="container">
+                <div class="pdp-container" id="pdpMainDynamicContainer"></div>
+            </div>
+        </div>
+
+        <div id="view-cart" class="spa-view">
+            <div class="container">
+                <h2 class="section-title">Your Shopping Cart</h2>
+                <div class="cart-page-layout" id="cartPageMainLayout"></div>
+            </div>
+        </div>
+
+        <div id="view-checkout" class="spa-view">
+            <div class="container">
+                <h2 class="section-title">Secure Shopify Checkout</h2>
+                <div class="checkout-layout" id="checkoutPageLayout"></div>
+            </div>
+        </div>
+
+        <div id="view-about" class="spa-view">
+            <div class="about-header">
+                <h2 style="font-size: 40px; text-transform: uppercase; font-weight: 800;">Our Sweet Origin</h2>
+            </div>
+            <div class="container">
+                <div class="about-content-box">
+                    <p>Founded in 2014, ChocoArtisan began as a visionary dream in a small kitchen. Our core philosophy was simple yet uncompromising: to rescue chocolate from industrial commoditization and return it to its rightful place as an artisanal luxury.</p>
+                    <p>We work exclusively with single-variety cacao profiles harvested across small farms in Ecuador, Madagascar, and Ghana. Every step of our process—from stone-grinding to hand-wrapping—honors pure culinary craftsmanship without chemicals, artificial stabilizers, or excess sugars.</p>
+                    <p>Thank you for supporting small-batch confections and celebrating pure chocolate mastery with us.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-contact" class="spa-view">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Have questions about corporate gifting or specific allergens? Reach out instantly.</p>
+                
+                <div class="contact-layout">
+                    <div class="contact-form-card">
+                        <form id="contactSubmissionForm" onsubmit="handleContactSubmit(event)">
+                            <div class="form-group">
+                                <label>Your Name</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Message</label>
+                                <textarea class="form-control" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="shopify-btn">Send Message</button>
+                        </form>
+                    </div>
+
+                    <div class="contact-info-card">
+                        <div class="info-row-item">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <div>
+                                <h4>Flagship Confectionery Roastery</h4>
+                                <p>742 Cacao Boulevard, Suite 100, Melt City</p>
+                            </div>
+                        </div>
+                        <div class="info-row-item">
+                            <i class="fa-solid fa-phone"></i>
+                            <div>
+                                <h4>Customer Experience Hotline</h4>
+                                <p>1-800-CHOCO-ARTISAN (Mon - Fri, 9am - 6pm EST)</p>
+                            </div>
+                        </div>
+                        <div class="info-row-item">
+                            <i class="fa-solid fa-envelope"></i>
+                            <div>
+                                <h4>Digital Assistance Concierge</h4>
+                                <p>concierge@chocoartisan.com</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-blog" class="spa-view">
+            <div class="container">
+                <h2 class="section-title">The Cocoa Journal</h2>
+                <p class="section-subtitle">Insights from our roasters and pastry chefs</p>
+
+                <div class="blog-grid">
+                    <div class="blog-card">
+                        <div class="blog-img-box"><img src="https://images.unsplash.com/photo-1511381939415-e44015466834?auto=format&fit=crop&w=600&q=80"></div>
+                        <div class="blog-post-content">
+                            <div class="blog-meta">June 2, 2026 • Roastery Insights</div>
+                            <h3 class="blog-title">Understanding Cocoa Percentages Matrix</h3>
+                            <p class="blog-excerpt">What is the functional structural difference between 70% and 85% cocoa bars when baking deep artisan profiles?</p>
+                        </div>
+                    </div>
+                    <div class="blog-card">
+                        <div class="blog-img-box"><img src="https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80"></div>
+                        <div class="blog-post-content">
+                            <div class="blog-meta">May 28, 2026 • Pairing Guide</div>
+                            <h3 class="blog-title">Pairing Dark Truffles with Specialty Espresso</h3>
+                            <p class="blog-excerpt">Discover how light-roast Ethiopian coffee profiles unlock hidden fruity notes inside single-origin chocolates.</p>
+                        </div>
+                    </div>
+                    <div class="blog-card">
+                        <div class="blog-img-box"><img src="https://images.unsplash.com/photo-1542841201-80d4e4e37049?auto=format&fit=crop&w=600&q=80"></div>
+                        <div class="blog-post-content">
+                            <div class="blog-meta">May 15, 2026 • Sustainability</div>
+                            <h3 class="blog-title">Fair Trade vs Direct Trade Truths</h3>
+                            <p class="blog-excerpt">An inside exploration of how working directly with farmers impacts local processing infrastructure.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-login" class="spa-view">
+            <div class="container">
+                <div class="auth-container">
+                    <h2 class="section-title" style="font-size:24px; margin-bottom:10px;">Customer Login</h2>
+                    <p style="text-align:center; color:var(--color-text-muted); margin-bottom:25px;">Sign into your boutique account portfolio</p>
+                    <form onsubmit="handleAuthLogin(event)">
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="loginEmailField" class="form-control" value="tester@qa.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="loginPasswordField" class="form-control" value="password123" required>
+                        </div>
+                        <button type="submit" class="shopify-btn" style="width:100%;">Sign In</button>
+                    </form>
+                    <p class="auth-switch-text">Don't have an account? <span onclick="navigateTo('signup')">Create one here</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-signup" class="spa-view">
+            <div class="container">
+                <div class="auth-container">
+                    <h2 class="section-title" style="font-size:24px; margin-bottom:10px;">Create Account</h2>
+                    <form onsubmit="handleAuthSignup(event)">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" required>
+                        </div>
+                        <button type="submit" class="shopify-btn" style="width:100%;">Register</button>
+                    </form>
+                    <p class="auth-switch-text">Already have an account? <span onclick="navigateTo('login')">Login here</span></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="view-account" class="spa-view">
+            <div class="container">
+                <h2 class="section-title" style="text-align:left;">Customer Account</h2>
+                <p class="section-subtitle" style="text-align:left; margin-bottom:30px;">Manage records, historical orders, and primary routing locations.</p>
+
+                <div class="account-layout">
+                    <ul class="account-tabs">
+                        <li class="account-tab-btn active-tab" id="tab-orders" onclick="switchAccountTab('orders')"><i class="fa-solid fa-box"></i> My Orders</li>
+                        <li class="account-tab-btn" id="tab-addresses" onclick="switchAccountTab('addresses')"><i class="fa-solid fa-map-pin"></i> My Address</li>
+                        <li class="account-tab-btn" id="tab-info" onclick="switchAccountTab('info')"><i class="fa-solid fa-circle-info"></i> Profile Info</li>
+                        <li class="account-tab-btn" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Logout</li>
+                    </ul>
+
+                    <div>
+                        <div class="account-content-pane active-pane" id="pane-orders">
+                            <h3 class="sidebar-widget-title" style="margin-bottom:20px;">Order Fulfillment History</h3>
+                            <div id="orderHistoryContainer"></div>
+                        </div>
+
+                        <div class="account-content-pane" id="pane-addresses">
+                            <h3 class="sidebar-widget-title" style="margin-bottom:20px;">Default Shipping Context</h3>
+                            <div style="line-height:1.8;">
+                                <p><strong>Recipient Name:</strong> Quality Tester Extraordinaire</p>
+                                <p><strong>Street Address:</strong> 101 Automation Sandbox Lane, Flow Matrix Loop</p>
+                                <p><strong>City/State/Zip:</strong> Suite 404, Dev City, CA 94016</p>
+                                <p><strong>Country:</strong> United States</p>
+                                <button class="shopify-btn shopify-btn-secondary" style="margin-top:20px; padding:8px 16px; font-size:12px;">Edit Address</button>
+                            </div>
+                        </div>
+
+                        <div class="account-content-pane" id="pane-info">
+                            <h3 class="sidebar-widget-title" style="margin-bottom:20px;">Account Registration Meta</h3>
+                            <div style="line-height:1.8;">
+                                <p><strong>Account Name:</strong> Professional QA Automation Account</p>
+                                <p><strong>Email Handle:</strong> tester@qa.com</p>
+                                <p><strong>Customer Tier:</strong> Elite Cocoa Connoisseur Gold</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <div class="modal-overlay" id="cart-modal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3 class="modal-title">Your Shopping Bag</h3>
-                <button class="modal-close" onclick="hideModal('cart-modal')"><i class="fa-solid fa-xmark"></i></button>
+    <div class="cart-drawer-overlay" id="cartDrawerOverlay" onclick="closeCartDrawer()">
+        <div class="cart-drawer" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <h3>Your Cart (<span id="drawerCartBadgeCount">0</span>)</h3>
+                <button class="drawer-close-btn" onclick="closeCartDrawer()"><i class="fa-solid fa-xmark"></i></button>
             </div>
-            <div class="modal-body">
-                <div id="cart-content-render-target">
-                    </div>
+            <div class="drawer-items-container" id="drawerItemsContent"></div>
+            <div class="drawer-footer" id="drawerFooterContent"></div>
+        </div>
+    </div>
+
+    <div class="custom-popup-overlay" id="customConfirmModal">
+        <div class="custom-popup-box">
+            <h3 class="popup-title" id="confirmModalTitle">Remove Item</h3>
+            <p class="popup-msg" id="confirmModalMessage">Are you absolutely sure you want to delete this chocolate item from your shopping bag?</p>
+            <div class="popup-actions-row">
+                <button class="shopify-btn shopify-btn-secondary" onclick="closeConfirmModal()">Cancel</button>
+                <button class="shopify-btn" style="background-color: var(--color-danger); border-color: var(--color-danger);" id="confirmModalExecuteBtn">Yes, Remove</button>
             </div>
         </div>
     </div>
 
-    <div class="modal-overlay" id="checkout-modal">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h3 class="modal-title">Secure Checkout Gateway</h3>
-                <button class="modal-close" onclick="hideModal('checkout-modal')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div class="modal-body">
-                <form id="checkout-form">
-                    <div class="form-group">
-                        <label class="form-label" for="checkout-name">Full Name *</label>
-                        <input type="text" id="checkout-name" class="form-input" required value="John QA Automation Tester">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="checkout-email">Email Address *</label>
-                        <input type="email" id="checkout-email" class="form-input" required value="automation-test@chocoartisan.io">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="checkout-phone">Phone Number</label>
-                        <input type="tel" id="checkout-phone" class="form-input" value="+1 (555) 019-2831">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="checkout-address">Shipping Address *</label>
-                        <input type="text" id="checkout-address" class="form-input" required value="1024 Selenium Loop Way, Suite 404">
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label class="form-label" for="checkout-city">City *</label>
-                            <input type="text" id="checkout-city" class="form-input" required value="Sandbox City">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="checkout-zip">ZIP / Postal Code *</label>
-                            <input type="text" id="checkout-zip" class="form-input" required value="94043">
-                        </div>
-                    </div>
-
-                    <div class="cart-summary" style="margin-top: 10px; margin-bottom: 20px;">
-                        <div class="summary-row">
-                            <span>Order Statement Total</span>
-                            <span id="checkout-modal-total-amount" style="font-weight: 800; color: var(--color-milk-chocolate);">$0.00</span>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">
-                        <i class="fa-solid fa-credit-card"></i> Authorize Test Order Transaction
-                    </button>
-                </form>
-            </div>
+    <div class="review-modal-overlay" id="customReviewModal">
+        <div class="review-modal-box">
+            <h3 class="sidebar-widget-title" style="margin-bottom:20px;">Write A Product Review</h3>
+            <form onsubmit="handleReviewSubmit(event)">
+                <div class="form-group">
+                    <label>Reviewer Name</label>
+                    <input type="text" id="revName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Rating Level</label>
+                    <select id="revRating" class="form-control">
+                        <option value="5">⭐⭐⭐⭐⭐ 5 Stars</option>
+                        <option value="4">⭐⭐⭐⭐ 4 Stars</option>
+                        <option value="3">⭐⭐⭐ 3 Stars</option>
+                        <option value="2">⭐⭐ 2 Stars</option>
+                        <option value="1">⭐ 1 Star</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Your Feedback Comment</label>
+                    <textarea id="revComment" class="form-control" rows="4" required></textarea>
+                </div>
+                <div class="popup-actions-row" style="justify-content: flex-end;">
+                    <button type="button" class="shopify-btn shopify-btn-secondary" onclick="closeReviewModal()">Cancel</button>
+                    <button type="submit" class="shopify-btn">Submit Review</button>
+                </div>
+            </form>
         </div>
-    </div>
-
-    <div id="notification-toast">
-        <i class="fa-solid fa-circle-info" id="notification-icon"></i>
-        <span id="notification-message-text">Alert confirmation text placeholder.</span>
     </div>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2026 ChocoArtisan Fine Chocolates Co. Simulated E-Commerce Sandbox Ecosystem Environment Profile Setup.</p>
+        <div class="footer-top">
+            <div>
+                <h4 class="footer-col-title">About Our House</h4>
+                <p class="footer-about-text">ChocoArtisan crafts master confections celebrating single-origin agriculture, clean ingredients, and luxurious aesthetic execution.</p>
+                <div class="social-icons-wrapper">
+                    <div class="social-icon-circle"><i class="fa-brands fa-facebook-f"></i></div>
+                    <div class="social-icon-circle"><i class="fa-brands fa-instagram"></i></div>
+                    <div class="social-icon-circle"><i class="fa-brands fa-pinterest-p"></i></div>
+                    <div class="social-icon-circle"><i class="fa-brands fa-x-twitter"></i></div>
+                </div>
+            </div>
+            <div>
+                <h4 class="footer-col-title">Collection Portals</h4>
+                <ul class="footer-links">
+                    <li onclick="navigateToFilterCatalog('Dark Chocolate')">Dark Chocolates</li>
+                    <li onclick="navigateToFilterCatalog('Milk Chocolate')">Milk Profiles</li>
+                    <li onclick="navigateToFilterCatalog('White Chocolate')">White Truffles</li>
+                    <li onclick="navigateToFilterCatalog('Gourmet Pralines')">Gourmet Pralines</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-col-title">Boutique Support</h4>
+                <ul class="footer-links">
+                    <li onclick="navigateTo('contact')">Track Shipments</li>
+                    <li onclick="navigateTo('about')">Allergen Safety Matrix</li>
+                    <li onclick="navigateTo('contact')">Corporate Bulk Gifting</li>
+                    <li onclick="navigateTo('contact')">Returns & Exchanges</li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="footer-col-title">Our Newsletter</h4>
+                <p class="footer-about-text" style="font-size:13px;">Subscribe for exclusive access to small-batch micro-lot cocoa releases.</p>
+                <div style="display:flex;">
+                    <input type="email" placeholder="email@example.com" class="form-control" style="border-radius:0; padding:8px 12px; font-size:13px;">
+                    <button class="shopify-btn" style="padding:0 15px;"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2026 ChocoArtisan Confectionery Houses Inc. All Rights Reserved. Built for high-fidelity QA exploration.</div>
+            <div style="display:flex; gap:15px; font-size:18px; color:var(--color-creamy-truffle);">
+                <i class="fa-brands fa-cc-visa"></i>
+                <i class="fa-brands fa-cc-mastercard"></i>
+                <i class="fa-brands fa-cc-amex"></i>
+                <i class="fa-brands fa-cc-apple-pay"></i>
+            </div>
         </div>
     </footer>
 
     <script>
-        // Preloaded Local JSON Product Collection Dataset Definitions
-        const products = [
-            { id: 1, name: '72% Obsidian Dark Cocoa Bar', price: 8.50, desc: 'Single-origin Ecuadorian dark bean profile with extreme rich bitter matte undertone textures.', tag: 'Signature' },
-            { id: 2, name: 'Velvet Silk Alpine Milk Bar', price: 7.99, desc: 'Conched classic Swiss formula refined with cream extracts to deliver high melting delays.', tag: 'Best Seller' },
-            { id: 3, name: 'Smoked Amber Salt Caramel Truffle', price: 12.50, desc: 'Salt-infused crystalline crust core wrapped in warm brown sugary layers.', tag: 'Premium' },
-            { id: 4, name: 'Roasted Almond Crunch Brick', price: 9.25, desc: 'Whole fire-roasted California organic nut clusters packed tight inside milk chocolate matrix layers.', tag: 'Classic' },
-            { id: 5, name: 'White Silk Madagascar Vanilla Bar', price: 8.99, desc: 'Pure cacao butter blend integrated with authentic hand-scraped gourmet bean flecks.', tag: 'Limited' },
-            { id: 6, name: 'Espresso Bean Infusion Melt', price: 10.00, desc: 'Dark roasted Arabica grind points directly suspended in heavy espresso liquor extracts.', tag: 'New Arrival' }
+        /* ==========================================================================
+           21. REAL DATA ARRAY DEFINITION: 10 CATEGORIES X 10 PRODUCTS EACH (100 TOTAL)
+           ========================================================================== */
+        const categories = [
+            "Dark Chocolate", "Milk Chocolate", "White Chocolate", "Gourmet Pralines", 
+            "Fruit Infusions", "Nut Clusters", "Caramel Center", "Spiced Cocoa", 
+            "Vegan Varieties", "Sugar Free Delights"
         ];
 
-        // Global Application Memory Core States Matrix
-        let cart = [];
+        const categoryImages = {
+            "Dark Chocolate": "https://images.unsplash.com/photo-1548907040-4d42b52145ca?auto=format&fit=crop&w=400&q=80",
+            "Milk Chocolate": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=400&q=80",
+            "White Chocolate": "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=400&q=80",
+            "Gourmet Pralines": "https://images.unsplash.com/photo-1542841201-80d4e4e37049?auto=format&fit=crop&w=400&q=80",
+            "Fruit Infusions": "https://images.unsplash.com/photo-1614088685112-0a7db9513e9f?auto=format&fit=crop&w=400&q=80",
+            "Nut Clusters": "https://images.unsplash.com/photo-1513534245088-238a19a34065?auto=format&fit=crop&w=400&q=80",
+            "Caramel Center": "https://images.unsplash.com/photo-1581798459219-318e76aecc7b?auto=format&fit=crop&w=400&q=80",
+            "Spiced Cocoa": "https://images.unsplash.com/photo-1604152135912-04a022e23696?auto=format&fit=crop&w=400&q=80",
+            "Vegan Varieties": "https://images.unsplash.com/photo-1546466691-df6216fa8f29?auto=format&fit=crop&w=400&q=80",
+            "Sugar Free Delights": "https://images.unsplash.com/photo-1526081347589-7fa3cb41b057?auto=format&fit=crop&w=400&q=80"
+        };
 
-        // Application Startup Handler Initialization Trigger
-        function initApp() {
-            renderProductCatalogCatalog();
-            setupFormListeners();
+        const products = [];
+        let idCounter = 1;
+
+        categories.forEach((cat, catIdx) => {
+            for(let p = 1; p <= 10; p++) {
+                let ratingVal = (4 + ((idCounter * 3) % 10) * 0.1).toFixed(1);
+                if (ratingVal > 5.0) ratingVal = 5.0;
+                
+                products.push({
+                    id: idCounter,
+                    category: cat,
+                    title: `${cat} Batch N°${p * 11}`,
+                    price: parseFloat((12.50 + (p * 2.25) + (catIdx * 1.50)).toFixed(2)),
+                    image: categoryImages[cat],
+                    rating: parseFloat(ratingVal),
+                    reviewsCount: 12 + (idCounter % 40),
+                    vendor: "ChocoArtisan Reserve",
+                    description: `This exquisite selection of ${cat.toLowerCase()} showcases our commitment to strict temperature crystallization. Formulated using unique single-plantation cacao beans, it balances standard flavor density with subtle organic aroma undertones. Ideal for discerning tasters and direct recipe validation testing profiles.`,
+                    userReviews: [
+                        { name: "John D.", rating: 5, text: "Absolutely stunning structure and velvet snap tone." },
+                        { name: "Sarah M.", rating: 4, text: "Rich flavor. Perfectly packed for clean delivery handling." }
+                    ]
+                });
+                idCounter++;
+            }
+        });
+
+        /* ==========================================================================
+           22. APP GLOBAL CORE CONFIG STATE MANAGEMENT
+           ========================================================================== */
+        let cart = [];
+        let currentActiveView = 'home';
+        let activeCategoryFilter = 'all';
+        let selectedPdpProductId = 1;
+        let activeAccountTab = 'orders';
+        let customerSession = { isLoggedIn: true, email: 'tester@qa.com' }; 
+        let mockHistoricalOrders = [
+            { id: "CA-98311", date: "June 01, 2026", status: "Delivered", total: 45.50 },
+            { id: "CA-94102", date: "May 12, 2026", status: "Processed", total: 112.20 }
+        ];
+
+        let globalConfirmCallback = null;
+        let pageHistory = [];
+        let databaseWindowHandle = null;
+
+        /* ==========================================================================
+           23. ROUTING REGISTRY SWITCH MANAGEMENT (SMOOTH SPA SWAP VIEW)
+           ========================================================================== */
+        function navigateTo(viewId, addToHistory = true) {
+            if(addToHistory){
+                if(currentActiveView !== viewId){
+                    pageHistory.push(currentActiveView);
+                }
+            }
+            
+            if(viewId === 'account' && !customerSession.isLoggedIn) {
+                viewId = 'login';
+            }
+
+            document.querySelectorAll('.spa-view').forEach(view => {
+                view.classList.remove('active-view');
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            const targetView = document.getElementById(`view-${viewId}`);
+            if(targetView) {
+                targetView.classList.add('active-view');
+                currentActiveView = viewId;
+
+                const backBtn = document.getElementById("global-back-btn");
+                if(backBtn){
+                    if(viewId === 'home' || pageHistory.length === 0){
+                        backBtn.style.display = 'none';
+                    } else {
+                        backBtn.style.display = 'block';
+                    }
+                }
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            const headerNavLink = document.getElementById(`nav-${viewId}`);
+            if(headerNavLink) {
+                headerNavLink.classList.add('active');
+            }
+
+            document.getElementById('mainNavMenu').style.display = '';
+
+            if(viewId === 'categories') renderCatalog();
+            if(viewId === 'cart') renderCartPage();
+            if(viewId === 'checkout') renderCheckoutPage();
+            if(viewId === 'account') renderAccountPane();
         }
 
-        // Render Product Data Collections into Screen Layout Card Elements
-        function renderProductCatalogCatalog() {
-            const container = document.getElementById('catalog-products-container');
-            if(!container) return;
+        function goBack(){
+            if(pageHistory.length === 0){
+                navigateTo('home', false);
+                return;
+            }
+            const previousView = pageHistory.pop();
+            navigateTo(previousView, false);
+        }
+        
+        function toggleMobileNav() {
+            const nav = document.getElementById('mainNavMenu');
+            if(nav.style.display === 'flex') {
+                nav.style.display = '';
+            } else {
+                nav.style.display = 'flex';
+                nav.style.flexDirection = 'column';
+                nav.style.position = 'absolute';
+                nav.style.top = '100%';
+                nav.style.left = '0';
+                nav.style.width = '100%';
+                nav.style.backgroundColor = 'var(--color-pure-white)';
+                nav.style.padding = '20px';
+                nav.style.borderBottom = '1px solid var(--color-border)';
+                nav.style.gap = '15px';
+            }
+        }
 
-            container.innerHTML = products.map(product => `
+        function navigateToFilterCatalog(categoryName) {
+            activeCategoryFilter = categoryName;
+            navigateTo('categories');
+        }
+
+        /* ==========================================================================
+           24. DOM RENDERING CONTEXT PIPELINES
+           ========================================================================== */
+        function initApp() {
+            renderHomeCategoryRow();
+            renderHomeFeaturedProducts();
+            renderSidebarFilters();
+            updateCartBadges();
+        }
+
+        function renderHomeCategoryRow() {
+            const container = document.getElementById('homeCategoryRow');
+            container.innerHTML = categories.map(cat => `
+                <div class="cat-circle-card" onclick="navigateToFilterCatalog('${cat}')">
+                    <div class="cat-circle-img">
+                        <img src="${categoryImages[cat]}" alt="${cat}">
+                    </div>
+                    <span>${cat}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderHomeFeaturedProducts() {
+            const container = document.getElementById('homeFeaturedProducts');
+            const featuredList = [products[0], products[12], products[25], products[38], products[51], products[64], products[77], products[89]];
+            container.innerHTML = featuredList.map(prod => generateProductCardHtml(prod)).join('');
+        }
+
+        function renderSidebarFilters() {
+            const container = document.getElementById('sidebarCategoryFilter');
+            let html = `<li class="filter-item ${activeCategoryFilter === 'all' ? 'active-filter' : ''}" onclick="setCatalogFilter('all')"><span>All Collections</span> <span class="filter-count">${products.length}</span></li>`;
+            
+            categories.forEach(cat => {
+                const count = products.filter(p => p.category === cat).length;
+                html += `
+                    <li class="filter-item ${activeCategoryFilter === cat ? 'active-filter' : ''}" onclick="setCatalogFilter('${cat}')">
+                        <span>${cat}</span> 
+                        <span class="filter-count">${count}</span>
+                    </li>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function generateProductCardHtml(prod) {
+            return `
                 <div class="product-card">
-                    <div class="product-image-container">
-                        <i class="fa-solid fa-cookie"></i>
-                        <span class="badge product-tag">${product.tag}</span>
+                    <div class="product-card-badge">Boutique Exclusive</div>
+                    <div class="product-image-wrapper" onclick="viewProductDetails(${prod.id})">
+                        <img src="${prod.image}" alt="${prod.title}">
                     </div>
                     <div class="product-info">
-                        <h3 class="product-title">${product.name}</h3>
-                        <p class="product-desc">${product.desc}</p>
-                        <div class="product-meta">
-                            <span class="product-price">$${product.price.toFixed(2)}</span>
-                            <button class="btn btn-primary" onclick="addItemToCart(${product.id})" style="padding: 8px 16px; font-size:13px;">
-                                <i class="fa-solid fa-cart-plus"></i> Add To Bag
+                        <div class="product-vendor">${prod.vendor}</div>
+                        <div class="product-title" onclick="viewProductDetails(${prod.id})">${prod.title}</div>
+                        <div class="product-rating">
+                            <i class="fa-solid fa-star"></i> <span>${prod.rating} (${prod.reviewsCount})</span>
+                        </div>
+                        <div class="product-price-row">
+                            <div class="product-price">$${prod.price.toFixed(2)}</div>
+                            <button class="card-action-btn" onclick="addToCart(${prod.id}, 1)" title="Add To Cart">
+                                <i class="fa-solid fa-plus"></i>
                             </button>
                         </div>
                     </div>
                 </div>
-            `).join('');
-        }
-
-        // Bind DOM form element interaction submit captures
-        function setupFormListeners() {
-            const checkoutForm = document.getElementById('checkout-form');
-            if(checkoutForm) {
-                checkoutForm.addEventListener('submit', processCheckout);
-            }
-        }
-
-        // Add targeted item to active cart schema arrays
-        function addItemToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            if(!product) return;
-
-            const existingIndex = cart.findIndex(item => item.id === productId);
-            if(existingIndex > -1) {
-                cart[existingIndex].quantity += 1;
-            } else {
-                cart.push({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    quantity: 1
-                });
-            }
-
-            updateCartDataViews();
-            showNotification(`${product.name} added safely to your shopping bag.`, 'success');
-        }
-
-        // Alter quantities inside cart layout selectors
-        function updateItemQuantity(productId, dynamicDeltaChange) {
-            const itemIndex = cart.findIndex(item => item.id === productId);
-            if(itemIndex === -1) return;
-
-            cart[itemIndex].quantity += dynamicDeltaChange;
-            
-            if(cart[itemIndex].quantity <= 0) {
-                cart.splice(itemIndex, 1);
-            }
-
-            updateCartDataViews();
-        }
-
-        // Drop specific product row cleanly from cart array list
-        function removeItemFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            updateCartDataViews();
-            showNotification('Item removed completely from your shopping bundle.', 'error');
-        }
-
-        // Re-calculate math metrics and update active UI displays
-        function updateCartDataViews() {
-            // Re-render badge quantity indicator counter values
-            const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-            document.getElementById('nav-cart-count').innerText = totalCount;
-
-            // Compute aggregated currency total balances
-            const subtotalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-
-            // Print item lists to render target container views
-            const renderTarget = document.getElementById('cart-content-render-target');
-            if(!renderTarget) return;
-
-            if(cart.length === 0) {
-                renderTarget.innerHTML = `
-                    <div class="empty-cart-message">
-                        <i class="fa-solid fa-bag-shopping"></i>
-                        <p>Your shopping cart is currently empty.</p>
-                        <button class="btn btn-secondary" onclick="hideModal('cart-modal')" style="margin-top:15px; padding: 8px 16px; font-size:13px;">Continue Browsing</button>
-                    </div>
-                `;
-                return;
-            }
-
-            let cartHtmlOutput = '<div class="cart-items-list">';
-            cartHtmlOutput += cart.map(item => `
-                <div class="cart-item">
-                    <div class="cart-item-icon"><i class="fa-solid fa-cookie"></i></div>
-                    <div class="cart-item-details">
-                        <div class="cart-item-name">${item.name}</div>
-                        <div class="cart-item-price">$${item.price.toFixed(2)}</div>
-                    </div>
-                    <div class="cart-item-qty">
-                        <button class="qty-btn" onclick="updateItemQuantity(${item.id}, -1)">-</button>
-                        <span style="font-size:13px; font-weight:bold; min-width:14px; text-align:center;">${item.quantity}</span>
-                        <button class="qty-btn" onclick="updateItemQuantity(${item.id}, 1)">+</button>
-                    </div>
-                    <button class="cart-item-remove" onclick="removeItemFromCart(${item.id})" title="Remove item"><i class="fa-solid fa-trash-can"></i></button>
-                </div>
-            `).join('');
-            cartHtmlOutput += '</div>';
-
-            // Append checkout buttons and billing matrix calculation displays
-            cartHtmlOutput += `
-                <div class="cart-summary">
-                    <div class="summary-row"><span>Items Count</span><span>${totalCount} items</span></div>
-                    <div class="summary-row"><span>Estimated Shipping</span><span style="color:var(--color-success); font-weight:700;">FREE</span></div>
-                    <div class="summary-row"><span>Total Balance</span><span id="cart-total-modal" style="font-weight:800; color:var(--color-milk-chocolate); font-size:16px;">$${subtotalAmount.toFixed(2)}</span></div>
-                </div>
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                    <button class="btn btn-primary" onclick="triggerCheckoutFlowTransition()">Proceed To Checkout Steps <i class="fa-solid fa-arrow-right"></i></button>
-                    <button class="btn btn-secondary" onclick="hideModal('cart-modal')">Close Window</button>
-                </div>
             `;
-
-            renderTarget.innerHTML = cartHtmlOutput;
-        }
-
-        // Handle structural view transitions into payment modals
-        function triggerCheckoutFlowTransition() {
-            hideModal('cart-modal');
-            
-            // Sync subtotal figures straight into payment review field masks
-            const subtotalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            document.getElementById('checkout-modal-total-amount').innerText = `$${subtotalAmount.toFixed(2)}`;
-            
-            showModal('checkout-modal');
-        }
-
-        // Toggle visibility state selectors on modal layouts
-        function showModal(modalId) {
-            const targetModal = document.getElementById(modalId);
-            if(targetModal) targetModal.classList.add('active');
-        }
-
-        function hideModal(modalId) {
-            const targetModal = document.getElementById(modalId);
-            if(targetModal) targetModal.classList.remove('active');
-        }
-
-        // Print feedback strings using custom layout banner strips
-        function showNotification(msgString, contextType = 'success') {
-            const toast = document.getElementById('notification-toast');
-            const msgContainer = document.getElementById('notification-message-text');
-            const icon = document.getElementById('notification-icon');
-
-            if(!toast || !msgContainer) return;
-
-            msgContainer.innerText = msgString;
-            toast.className = `active ${contextType}`;
-
-            if(contextType === 'success') {
-                icon.className = 'fa-solid fa-circle-check';
-            } else {
-                icon.className = 'fa-solid fa-circle-exclamation';
-            }
-
-            setTimeout(() => {
-                toast.classList.remove('active');
-            }, 3500);
         }
 
         /* ==========================================================================
-           9. CROSS-TAB SQL DATA EXTRACTION PIPELINE & LISTENERS
+           25. CATALOG SORT & FILTER PROCESSING LAYER
            ========================================================================== */
-        
-        // Handle checkout data processing sequence and send queries to database sandbox
-        function processCheckout(e) {
-            if(e) e.preventDefault();
-            
-            if(cart.length === 0) {
-                showNotification('Your cart is empty', 'error');
-                return;
-            }
-            
-            // Collect form input parameters
-            const name = document.getElementById('checkout-name').value;
-            const email = document.getElementById('checkout-email').value;
-            const phone = document.getElementById('checkout-phone').value;
-            const address = document.getElementById('checkout-address').value;
-            const city = document.getElementById('checkout-city').value;
-            const zip = document.getElementById('checkout-zip').value;
-            
-            // Structural form data confirmation mask
-            if(!name || !email || !address || !city || !zip) {
-                showNotification('Please fill in all required fields', 'error');
-                return;
-            }
-            
-            // Generate standard numbers for database compatibility keys
-            const numericOrderId = Math.floor(100000 + Math.random() * 900000);
-            const orderId = 'ORD-' + numericOrderId;
-            
-            // --- LOOP THROUGH YOUR ACTIVE CART ITEMS AND SEND TO SANDBOX TAB ---
-            cart.forEach(item => {
-                // Build an explicit SQL INSERT string matching your custom schema columns
-                const insertSQL = `USE choco_shopify_db; INSERT INTO customer_orders VALUES (${numericOrderId}, '${item.name}', ${item.price}, ${item.quantity});`;
-                
-                // Fire the text string line right into your open database tab view
-                sendSQLToSandbox(insertSQL);
-            });
-            
-            // Hide operational screen overlays
-            hideModal('checkout-modal');
-            
-            // Display alert confirmation tracking statement
-            showNotification(`Order ${orderId} records transmitted successfully!`, 'success');
-            
-            // Reset active memory arrays and interface counters
-            cart = [];
-            updateCartDataViews();
-            
-            const formObj = document.getElementById('checkout-form');
-            if(formObj) formObj.reset();
+        function setCatalogFilter(cat) {
+            activeCategoryFilter = cat;
+            renderSidebarFilters();
+            renderCatalog();
         }
 
-        // Initialize application visual items on load
+        function renderCatalog() {
+            const grid = document.getElementById('catalogProductGrid');
+            const countLabel = document.getElementById('catalogResultsCount');
+            
+            let filtered = activeCategoryFilter === 'all' ? [...products] : products.filter(p => p.category === activeCategoryFilter);
+            
+            const sortVal = document.getElementById('catalogSortSelect').value;
+            if(sortVal === 'price-low') {
+                filtered.sort((a,b) => a.price - b.price);
+            } else if(sortVal === 'price-high') {
+                filtered.sort((a,b) => b.price - a.price);
+            } else if(sortVal === 'rating') {
+                filtered.sort((a,b) => b.rating - a.rating);
+            }
+
+            countLabel.textContent = `Showing ${filtered.length} unique confections`;
+            
+            if(filtered.length === 0) {
+                grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--color-text-muted);">No products found matching selection criteria.</div>`;
+            } else {
+                grid.innerHTML = filtered.map(p => generateProductCardHtml(p)).join('');
+            }
+        }
+
+        function applySorting() {
+            renderCatalog();
+        }
+
+        /* ==========================================================================
+           26. PRODUCT DETAILS VIEW (PDP) LOGIC SYSTEM
+           ========================================================================== */
+        function viewProductDetails(productId) {
+            selectedPdpProductId = productId;
+            navigateTo('pdp');
+            renderPdpView();
+        }
+
+        function renderPdpView() {
+            const container = document.getElementById('pdpMainDynamicContainer');
+            const prod = products.find(p => p.id === selectedPdpProductId);
+            if(!prod) return;
+
+            const reviewsHtml = prod.userReviews.map(r => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <span>${r.name}</span>
+                        <span style="color:#FFB800;">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+                    </div>
+                    <div class="review-text">"${r.text}"</div>
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="pdp-gallery">
+                    <div class="pdp-main-img-box">
+                        <img src="${prod.image}" alt="${prod.title}" id="pdpMasterImageElement">
+                    </div>
+                </div>
+                <div class="pdp-details-box">
+                    <div class="pdp-vendor">${prod.vendor}</div>
+                    <h1 class="pdp-title">${prod.title}</h1>
+                    
+                    <div class="pdp-meta-row">
+                        <div class="pdp-price">$${prod.price.toFixed(2)}</div>
+                        <div class="product-rating" style="margin-bottom:0;">
+                            <i class="fa-solid fa-star"></i>
+                            <strong style="color:var(--color-text-main); font-size:14px;">${prod.rating}</strong>
+                            <span>(${prod.reviewsCount} customer reviews)</span>
+                        </div>
+                    </div>
+
+                    <div class="pdp-description">
+                        <p>${prod.description}</p>
+                    </div>
+
+                    <div>
+                        <label class="qty-selector-label">Quantity</label>
+                        <div class="pdp-actions-row">
+                            <div class="quantity-selector">
+                                <button class="qty-btn" onclick="adjustPdpQty(-1)">-</button>
+                                <input type="text" id="pdpQtyField" class="qty-input" value="1" readonly>
+                                <button class="qty-btn" onclick="adjustPdpQty(1)">+</button>
+                            </div>
+                            <button class="shopify-btn pdp-add-btn" onclick="executePdpAdd(${prod.id})">
+                                <i class="fa-solid fa-bag-shopping"></i> Add To Cart
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pdp-reviews-section">
+                        <div class="review-write-trigger">
+                            <h3 class="sidebar-widget-title" style="margin-bottom:0; border-bottom:none;">Customer Reviews</h3>
+                            <button class="shopify-btn shopify-btn-secondary" style="padding:6px 14px; font-size:12px;" onclick="openReviewModal()">Write Review</button>
+                        </div>
+                        <div class="reviews-list">
+                            ${reviewsHtml}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function adjustPdpQty(amount) {
+            const field = document.getElementById('pdpQtyField');
+            let current = parseInt(field.value) || 1;
+            current += amount;
+            if(current < 1) current = 1;
+            field.value = current;
+        }
+
+        function executePdpAdd(productId) {
+            const qty = parseInt(document.getElementById('pdpQtyField').value) || 1;
+            addToCart(productId, qty);
+        }
+
+        /* ==========================================================================
+           27. SHOPPING CART ENGINE (MINI-CART DRAWER + FULL SERVICE CART PAGE)
+           ========================================================================== */
+        function addToCart(productId, qty) {
+            const prod = products.find(p => p.id === productId);
+            if(!prod) return;
+
+            const existing = cart.find(item => item.product.id === productId);
+            if(existing) {
+                existing.quantity += qty;
+            } else {
+                cart.push({ product: prod, quantity: qty });
+            }
+
+            updateCartBadges();
+            openCartDrawer();
+            renderMiniCartContent();
+            
+            // Build cross-tab tracking query string
+            sendSQLToSandbox(`INSERT INTO cart_records (product_id, title, price, quantity) VALUES (${prod.id}, '${prod.title}', ${prod.price}, ${qty});`);
+        }
+
+        function updateCartBadges() {
+            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+            document.getElementById('headerCartCount').textContent = totalItems;
+            document.getElementById('drawerCartBadgeCount').textContent = totalItems;
+        }
+
+        function openCartDrawer() {
+            document.getElementById('cartDrawerOverlay').classList.add('drawer-open');
+            renderMiniCartContent();
+        }
+
+        function closeCartDrawer() {
+            document.getElementById('cartDrawerOverlay').classList.remove('drawer-open');
+        }
+
+        function renderMiniCartContent() {
+            const container = document.getElementById('drawerItemsContent');
+            const footer = document.getElementById('drawerFooterContent');
+
+            if(cart.length === 0) {
+                container.innerHTML = `
+                    <div class="drawer-empty-state">
+                        <i class="fa-solid fa-cookie-bite"></i>
+                        <p style="font-weight:bold; margin-bottom:10px;">Your shopping bag is empty</p>
+                        <p style="font-size:13px;">Add elite chocolates to unlock delivery portals.</p>
+                    </div>
+                `;
+                footer.innerHTML = `
+                    <button class="shopify-btn" style="width:100%;" onclick="closeCartDrawer(); navigateTo('categories');">Continue Shopping</button>
+                `;
+                return;
+            }
+
+            container.innerHTML = cart.map(item => `
+                <div class="drawer-item">
+                    <img class="drawer-item-img" src="${item.product.image}" alt="${item.product.title}">
+                    <div class="drawer-item-details">
+                        <div class="drawer-item-title">${item.product.title}</div>
+                        <div class="drawer-item-price">$${item.product.price.toFixed(2)} × ${item.quantity}</div>
+                        <div style="font-weight:800; font-size:13px; color:var(--color-dark-cocoa);">Subtotal: $${(item.product.price * item.quantity).toFixed(2)}</div>
+                    </div>
+                    <button class="drawer-item-remove-btn" onclick="triggerRemoveConfirm(${item.product.id}, 'mini')">
+                        <i class="fa-regular fa-trash-can"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+
+            footer.innerHTML = `
+                <div class="drawer-subtotal-row">
+                    <span>Estimated Subtotal</span>
+                    <span>$${subtotal.toFixed(2)}</span>
+                </div>
+                <p style="font-size:12px; color:var(--color-text-muted); margin-bottom:15px; text-align:center;">Shipping, taxes, and promotional codes computed at checkout.</p>
+                <div class="drawer-actions">
+                    <button class="shopify-btn shopify-btn-secondary" onclick="closeCartDrawer(); navigateTo('cart');">View Shopping Bag</button>
+                    <button class="shopify-btn" onclick="closeCartDrawer(); navigateTo('checkout');">Proceed To Checkout</button>
+                </div>
+            `;
+        }
+
+        function renderCartPage() {
+            const container = document.getElementById('cartPageMainLayout');
+            if(cart.length === 0) {
+                container.style.display = 'block';
+                container.innerHTML = `
+                    <div class="cart-page-empty">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                        <h3>Your Shopify Shopping Cart is Empty</h3>
+                        <p style="margin:15px 0 25px 0;">We haven't detected any confections in your processing selection matrix.</p>
+                        <button class="shopify-btn" onclick="navigateTo('categories')">Return To Shop Collections</button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.style.display = 'grid';
+            const itemsHtml = cart.map(item => `
+                <div class="cart-page-item-row">
+                    <div class="cart-page-product">
+                        <img class="cart-page-img" src="${item.product.image}">
+                        <div>
+                            <div class="cart-page-item-title">${item.product.title}</div>
+                            <div style="font-size:12px; color:var(--color-text-muted); margin-top:4px;">Category: ${item.product.category}</div>
+                        </div>
+                    </div>
+                    <div class="cart-page-item-price">$${item.product.price.toFixed(2)}</div>
+                    <div>
+                        <div class="quantity-selector" style="height:34px;">
+                            <button class="qty-btn" style="width:25px;" onclick="updateCartItemQty(${item.product.id}, -1)">-</button>
+                            <input type="text" class="qty-input" style="width:35px;" value="${item.quantity}" readonly>
+                            <button class="qty-btn" style="width:25px;" onclick="updateCartItemQty(${item.product.id}, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="cart-page-item-total" style="display:flex; align-items:center; justify-content:space-between;">
+                        <span>$${(item.product.price * item.quantity).toFixed(2)}</span>
+                        <button class="drawer-item-remove-btn" style="position:static;" onclick="triggerRemoveConfirm(${item.product.id}, 'page')">
+                            <i class="fa-regular fa-trash-can" style="font-size:16px;"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+
+            container.innerHTML = `
+                <div class="cart-table-container">
+                    <div class="cart-headings">
+                        <span>Product Confection</span>
+                        <span>Price</span>
+                        <span>Quantity</span>
+                        <span>Total Summary</span>
+                    </div>
+                    ${itemsHtml}
+                </div>
+                <div class="cart-summary-panel">
+                    <h3 class="summary-title">Order Pricing Matrix</h3>
+                    <div class="summary-row">
+                        <span>Cart Subtotal</span>
+                        <strong>$${subtotal.toFixed(2)}</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Boutique Delivery</span>
+                        <span style="color:var(--color-success); font-weight:bold;">FREE Standard</span>
+                    </div>
+                    <div class="summary-total-row">
+                        <span>Total Due</span>
+                        <span>$${subtotal.toFixed(2)}</span>
+                    </div>
+                    <button class="shopify-btn" style="width:100%; margin-top:25px;" onclick="navigateTo('checkout')">Proceed To Checkout</button>
+                    <button class="shopify-btn shopify-btn-secondary" style="width:100%; margin-top:10px; border:none;" onclick="navigateTo('categories')">Continue Shopping</button>
+                </div>
+            `;
+        }
+
+        function updateCartItemQty(productId, amount) {
+            const item = cart.find(i => i.product.id === productId);
+            if(!item) return;
+
+            item.quantity += amount;
+            if(item.quantity <= 0) {
+                triggerRemoveConfirm(productId, 'page');
+            } else {
+                updateCartBadges();
+                if(currentActiveView === 'cart') renderCartPage();
+                renderMiniCartContent();
+                
+                sendSQLToSandbox(`UPDATE cart_records SET quantity = ${item.quantity} WHERE product_id = ${productId};`);
+            }
+        }
+
+        /* ==========================================================================
+           28. ANTI-ALERT NATIVE POPUP INTERCEPTORS
+           ========================================================================== */
+        function triggerRemoveConfirm(productId, sourceContext) {
+            const modal = document.getElementById('customConfirmModal');
+            const targetBtn = document.getElementById('confirmModalExecuteBtn');
+            
+            modal.classList.add('popup-open');
+
+            targetBtn.onclick = function() {
+                cart = cart.filter(item => item.product.id !== productId);
+                updateCartBadges();
+                closeConfirmModal();
+                
+                if(sourceContext === 'mini' || document.getElementById('cartDrawerOverlay').classList.contains('drawer-open')) {
+                    renderMiniCartContent();
+                }
+                if(currentActiveView === 'cart') {
+                    renderCartPage();
+                }
+                
+                sendSQLToSandbox(`DELETE FROM cart_records WHERE product_id = ${productId};`);
+            };
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('customConfirmModal').classList.remove('popup-open');
+        }
+
+        /* ==========================================================================
+           29. CHECKOUT PAGE PROCESS COMPLETION CONTROL LAYERS
+           ========================================================================== */
+        function renderCheckoutPage() {
+            const container = document.getElementById('checkoutPageLayout');
+            if(cart.length === 0) {
+                container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px;">No pending checkout configurations found. Add items to cart.</div>`;
+                return;
+            }
+
+            const subtotal = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+            const itemsMiniHtml = cart.map(item => `
+                <div class="checkout-item-mini">
+                    <div class="checkout-item-mini-info">
+                        <div class="checkout-mini-img">
+                            <img src="${item.product.image}" style="width:100%; height:100%; object-fit:cover;">
+                            <span class="checkout-mini-badge">${item.quantity}</span>
+                        </div>
+                        <span style="font-size:14px; font-weight:700; color:var(--color-dark-cocoa);">${item.product.title}</span>
+                    </div>
+                    <span style="font-weight:bold; font-size:14px;">$${(item.product.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="checkout-form-section">
+                    <form onsubmit="executeOrderFinalization(event)">
+                        <h3 class="checkout-block-title">Contact Information</h3>
+                        <div class="form-group">
+                            <label>Email Address for Delivery Notification</label>
+                            <input type="email" class="form-control" value="${customerSession.email}" required>
+                        </div>
+
+                        <h3 class="checkout-block-title" style="margin-top:30px;">Shipping Destination</h3>
+                        <div class="checkout-grid-2">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" value="Quality" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" value="Tester" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Street Address</label>
+                            <input type="text" class="form-control" value="101 Automation Sandbox Lane" required>
+                        </div>
+                        <div class="checkout-grid-2">
+                            <div class="form-group">
+                                <label>City</label>
+                                <input type="text" class="form-control" value="Dev City" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Postal Code</label>
+                                <input type="text" class="form-control" value="94016" required>
+                            </div>
+                        </div>
+
+                        <h3 class="checkout-block-title" style="margin-top:30px;">Payment Vault (Simulated Sandbox)</h3>
+                        <div class="form-group">
+                            <label>Card Number</label>
+                            <input type="text" class="form-control" value="4111 2222 3333 4444" placeholder="4111 2222 3333 4444" required>
+                        </div>
+                        <div class="checkout-grid-2">
+                            <div class="form-group">
+                                <label>Expiration Date</label>
+                                <input type="text" class="form-control" value="12/29" placeholder="MM/YY" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Security CVV</label>
+                                <input type="text" class="form-control" value="100" placeholder="100" required>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="shopify-btn" style="width:100%; margin-top:20px; font-size:16px; padding:15px;">Authorize Payment - $${subtotal.toFixed(2)}</button>
+                    </form>
+                </div>
+
+                <div class="checkout-sidebar-summary">
+                    <h3 class="summary-title" style="font-size:16px;">Order Manifest</h3>
+                    <div class="checkout-items-list">${itemsMiniHtml}</div>
+                    
+                    <div class="summary-row" style="border-top:1px solid var(--color-border); padding-top:15px;">
+                        <span>Subtotal</span>
+                        <strong>$${subtotal.toFixed(2)}</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>Shipping Cost</span>
+                        <span style="color:var(--color-success); font-weight:bold;">FREE</span>
+                    </div>
+                    <div class="summary-total-row">
+                        <span>Total Due</span>
+                        <span>$${subtotal.toFixed(2)}</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function executeOrderFinalization(e) {
+            e.preventDefault();
+            const orderNum = "CA-" + Math.floor(10000 + Math.random() * 90000);
+            const totalSpent = cart.reduce((acc, item) => acc + (item.product.price * item.quantity), 0);
+            
+            mockHistoricalOrders.unshift({
+                id: orderNum,
+                date: "Today",
+                status: "Unfulfilled (Paid)",
+                total: parseFloat(totalSpent.toFixed(2))
+            });
+
+            cart = [];
+            updateCartBadges();
+
+            sendSQLToSandbox(`INSERT INTO orders_fulfilled (order_id, date, status, total_charged) VALUES ('${orderNum}', 'Today', 'Paid', ${totalSpent.toFixed(2)});`);
+
+            const mainContainer = document.getElementById('view-checkout');
+            mainContainer.innerHTML = `
+                <div class="container">
+                    <div class="order-success-box">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <h2 class="section-title" style="font-size:26px; margin-bottom:10px;">Order Authorized Successfully!</h2>
+                        <p style="color:var(--color-text-muted); margin-bottom:15px;">Thank you for your purchase. Your payment profile processed perfectly.</p>
+                        <div style="background-color:var(--color-sweet-cream); padding:15px; margin-bottom:25px; font-weight:bold; border:1px solid var(--color-border);">
+                            Tracking Reference: ${orderNum}
+                        </div>
+                        <button class="shopify-btn" onclick="window.location.reload()">Return Home / Clear Sandbox</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        /* ==========================================================================
+           30. CUSTOMER MANAGEMENT HUB (LOGIN / TABS SYSTEM)
+           ========================================================================== */
+        function handleAuthLogin(e) {
+            e.preventDefault();
+            customerSession.isLoggedIn = true;
+            customerSession.email = document.getElementById('loginEmailField').value || 'tester@qa.com';
+            navigateTo('account');
+        }
+
+        function handleAuthSignup(e) {
+            e.preventDefault();
+            customerSession.isLoggedIn = true;
+            navigateTo('account');
+        }
+
+        function handleLogout() {
+            customerSession.isLoggedIn = false;
+            navigateTo('home');
+        }
+
+        function switchAccountTab(tabId) {
+            activeAccountTab = tabId;
+            document.querySelectorAll('.account-tab-btn').forEach(btn => btn.classList.remove('active-tab'));
+            document.querySelectorAll('.account-content-pane').forEach(pane => pane.classList.remove('active-pane'));
+
+            document.getElementById(`tab-${tabId}`).classList.add('active-tab');
+            document.getElementById(`pane-${tabId}`).classList.add('active-pane');
+        }
+
+        function renderAccountPane() {
+            const container = document.getElementById('orderHistoryContainer');
+            if(mockHistoricalOrders.length === 0) {
+                container.innerHTML = `<p style="color:var(--color-text-muted);">No recorded transaction data matching active account signature context logs.</p>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="order-history-table">
+                    <thead>
+                        <tr>
+                            <th>Reference ID</th>
+                            <th>Date Timestamp</th>
+                            <th>Fulfillment Status</th>
+                            <th>Total Charged</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${mockHistoricalOrders.map(o => `
+                            <tr>
+                                <td style="font-weight:bold; color:var(--color-warm-caramel);">${o.id}</td>
+                                <td>${o.date}</td>
+                                <td><span style="background-color:var(--color-sweet-cream); padding:4px 8px; font-size:12px; font-weight:bold;">${o.status}</span></td>
+                                <td style="font-weight:800;">$${o.total.toFixed(2)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        /* ==========================================================================
+           31. DYNAMIC REVIEW WRITING POPUPS MODALS
+           ========================================================================== */
+        function openReviewModal() {
+            document.getElementById('customReviewModal').classList.add('modal-open');
+        }
+
+        function closeReviewModal() {
+            document.getElementById('customReviewModal').classList.remove('modal-open');
+        }
+
+        function handleReviewSubmit(e) {
+            e.preventDefault();
+            const nameValue = document.getElementById('revName').value || "Anonymous Tester";
+            const ratingValue = parseInt(document.getElementById('revRating').value) || 5;
+            const commentValue = document.getElementById('revComment').value || "";
+
+            const prod = products.find(p => p.id === selectedPdpProductId);
+            if(prod) {
+                prod.userReviews.unshift({
+                    name: nameValue,
+                    rating: ratingValue,
+                    text: commentValue
+                });
+                prod.reviewsCount++;
+            }
+
+            closeReviewModal();
+            renderPdpView(); 
+            
+            document.getElementById('revName').value = '';
+            document.getElementById('revComment').value = '';
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const card = document.querySelector('.contact-form-card');
+            card.innerHTML = `
+                <div style="text-align:center; padding:30px;">
+                    <i class="fa-solid fa-paper-plane" style="font-size:40px; color:var(--color-warm-caramel); margin-bottom:15px;"></i>
+                    <h3 style="text-transform:uppercase; margin-bottom:10px;">Message Forwarded</h3>
+                    <p style="color:var(--color-text-muted); font-size:14px;">Your digital correspondence data payload was transferred correctly without browser-native popups.</p>
+                </div>
+            `;
+        }
+
         window.addEventListener('DOMContentLoaded', initApp);
 
-        // Global reference to hold the database tab handle
-        let databaseWindowHandle = null;
+        /* ==========================================================================
+           32. CROSS-TAB CROSS-ORIGIN DATABASE SANDBOX TUNNEL ENGINE
+           ========================================================================== */
+        function connectToDatabaseSandbox() {
+            const statusDot = document.getElementById("dbServerStatusDot");
+            const statusText = document.getElementById("dbServerStatusText");
 
-        // 1. Core function to look up or open your live database sandbox and send schema configurations
-        function connectAndSetupDatabaseSandbox() {
             if (!databaseWindowHandle || databaseWindowHandle.closed) {
                 const sandboxUrl = "https://qatester1320.github.io/sqldatabasedemo/p8.html";
                 databaseWindowHandle = window.open(sandboxUrl, "MySQL_Sandbox_Server");
+                
+                // Toggle native visual tracker states without alert boxes
+                if (statusDot && statusText) {
+                    statusDot.classList.add("connected");
+                    statusText.textContent = "Database Sandbox Server Connection Status: Online (Connected to GitHub Pages)";
+                }
             } else {
                 databaseWindowHandle.focus();
             }
-
-            // Fire structural setup commands exactly 1.2 seconds after button is clicked to avoid race states
-            setTimeout(() => {
-                const createStoreSchemaSQL = `
-                    CREATE DATABASE choco_shopify_db;
-                    USE choco_shopify_db;
-
-                    CREATE TABLE customer_orders (
-                        order_id INT,
-                        product_name STRING,
-                        price DECIMAL,
-                        quantity INT
-                    );
-                `;
-                sendSQLToSandbox(createStoreSchemaSQL);
-                showNotification("Chocolate store database structure initialized!", "success");
-            }, 1200);
         }
 
-        // 2. Transmit generated queries securely over to your opened sandbox tab
         function sendSQLToSandbox(sqlQueryText) {
+            const statusDot = document.getElementById("dbServerStatusDot");
+            const statusText = document.getElementById("dbServerStatusText");
+
             if (!databaseWindowHandle || databaseWindowHandle.closed) {
-                console.error("Database connection missing. Please click the connect button first.");
+                if (statusDot && statusText) {
+                    statusDot.classList.remove("connected");
+                    statusText.textContent = "Database Sandbox Server Connection Status: Connection Dropped / Execution Failed";
+                }
+                console.error("Database connection missing. Please connect to the sandbox first.");
                 return;
             }
+            
             databaseWindowHandle.postMessage({
                 action: "EXECUTE_FROM_FRONTEND",
                 query: sqlQueryText
-            }, "*");
+            }, "*"); 
         }
-        
     </script>
 </body>
 </html>
