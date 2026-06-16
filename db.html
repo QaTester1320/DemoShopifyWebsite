@@ -2989,44 +2989,74 @@
         window.addEventListener('DOMContentLoaded', initApp);
 
         /* ==========================================================================
-           32. CROSS-TAB CROSS-ORIGIN DATABASE SANDBOX TUNNEL ENGINE
-           ========================================================================== */
-        function connectToDatabaseSandbox() {
-            const statusDot = document.getElementById("dbServerStatusDot");
-            const statusText = document.getElementById("dbServerStatusText");
+   32. CROSS-TAB CROSS-ORIGIN DATABASE SANDBOX TUNNEL ENGINE
+   ========================================================================== */
+function connectToDatabaseSandbox() {
+    const statusDot = document.getElementById("dbServerStatusDot");
+    const statusText = document.getElementById("dbServerStatusText");
 
-            if (!databaseWindowHandle || databaseWindowHandle.closed) {
-                const sandboxUrl = "https://qatester1320.github.io/sqldatabasedemo/p8.html";
-                databaseWindowHandle = window.open(sandboxUrl, "MySQL_Sandbox_Server");
-                
-                // Toggle native visual tracker states without alert boxes
-                if (statusDot && statusText) {
-                    statusDot.classList.add("connected");
-                    statusText.textContent = "Database Sandbox Server Connection Status: Online (Connected to GitHub Pages)";
-                }
-            } else {
-                databaseWindowHandle.focus();
-            }
+    if (!databaseWindowHandle || databaseWindowHandle.closed) {
+        const sandboxUrl = "https://qatester1320.github.io/sqldatabasedemo/p8.html";
+        databaseWindowHandle = window.open(sandboxUrl, "MySQL_Sandbox_Server");
+        
+        // Toggle native visual tracker states without alert boxes
+        if (statusDot && statusText) {
+            statusDot.classList.add("connected");
+            statusText.textContent = "Database Sandbox Server Connection Status: Online (Connected to GitHub Pages)";
         }
+    } else {
+        databaseWindowHandle.focus();
+    }
+}
 
-        function sendSQLToSandbox(sqlQueryText) {
-            const statusDot = document.getElementById("dbServerStatusDot");
-            const statusText = document.getElementById("dbServerStatusText");
+function sendSQLToSandbox(sqlQueryText) {
+    const statusDot = document.getElementById("dbServerStatusDot");
+    const statusText = document.getElementById("dbServerStatusText");
 
-            if (!databaseWindowHandle || databaseWindowHandle.closed) {
-                if (statusDot && statusText) {
-                    statusDot.classList.remove("connected");
-                    statusText.textContent = "Database Sandbox Server Connection Status: Connection Dropped / Execution Failed";
-                }
-                console.error("Database connection missing. Please connect to the sandbox first.");
-                return;
-            }
-            
-            databaseWindowHandle.postMessage({
-                action: "EXECUTE_FROM_FRONTEND",
-                query: sqlQueryText
-            }, "*"); 
-        }
+    // Case 1: If the window is completely closed or not initialized yet
+    if (!databaseWindowHandle || databaseWindowHandle.closed) {
+        connectToDatabaseSandbox();
+        
+        // CRITICAL FIX: Wait 1.5 seconds for the database tab to finish initializing 
+        // its libraries before sending the structure setup and the insert query.
+        setTimeout(() => {
+            executeSchemaAndQuery(sqlQueryText);
+        }, 1500);
+        return;
+    }
+    
+    // Case 2: The window is already open, send it immediately
+    executeSchemaAndQuery(sqlQueryText);
+}
+
+// Helper function to safely wrap queries with their required database schema and columns
+function executeSchemaAndQuery(actualInsertQuery) {
+    const fullyStructuredSQL = `
+        CREATE DATABASE IF NOT EXISTS choco_shopify_db;
+        USE choco_shopify_db;
+        CREATE TABLE IF NOT EXISTS cart_records (
+            product_id INT,
+            title STRING,
+            price DECIMAL,
+            quantity INT
+        );
+        CREATE TABLE IF NOT EXISTS orders_fulfilled (
+            order_id STRING,
+            product_name STRING,
+            price DECIMAL,
+            quantity INT,
+            customer_name STRING,
+            shipping_address STRING,
+            order_date STRING
+        );
+        ${actualInsertQuery}
+    `;
+
+    databaseWindowHandle.postMessage({
+        action: "EXECUTE_FROM_FRONTEND",
+        query: fullyStructuredSQL
+    }, "*"); 
+}
     </script>
 </body>
 </html>
